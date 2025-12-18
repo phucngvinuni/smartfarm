@@ -1,3 +1,4 @@
+
 export enum HealthStatus {
   HEALTHY = 'Healthy',
   WARNING = 'Warning',
@@ -48,4 +49,21 @@ export interface Alert {
   timestamp: string;
   source: string;
   type: 'AI_DETECTION' | 'SENSOR_THRESHOLD' | 'SYSTEM';
+}
+
+export type DeviceStatus = 'Online' | 'Offline' | 'Maintenance' | 'Error';
+
+export interface Device {
+  id: string;
+  name: string;
+  type: 'Sensor' | 'Camera' | 'Gateway' | 'Server' | 'Controller';
+  model: string;
+  location: string;
+  status: DeviceStatus;
+  batteryLevel?: number; // percentage, null if wired
+  lastPing: string;
+  installDate: string;
+  firmware: string;
+  maintenanceDue?: string; // ISO Date
+  issues?: string[];
 }

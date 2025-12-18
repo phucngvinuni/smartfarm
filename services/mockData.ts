@@ -1,4 +1,5 @@
-import { LivestockData, EnvironmentData, Alert, HealthStatus, LivestockHistoryPoint } from '../types';
+
+import { LivestockData, EnvironmentData, Alert, HealthStatus, LivestockHistoryPoint, Device } from '../types';
 
 export const generateLivestockData = (count: number): LivestockData[] => {
   return Array.from({ length: count }, (_, i) => {
@@ -126,3 +127,150 @@ export const mockAlerts: Alert[] = [
     type: 'SYSTEM'
   }
 ];
+
+export const generateDevices = (): Device[] => {
+  return [
+    {
+      id: 'gw-01',
+      name: 'Main LoRaWAN Gateway',
+      type: 'Gateway',
+      model: 'Kerlink Wirnet iStation',
+      location: 'Central Tower',
+      status: 'Online',
+      lastPing: 'Just now',
+      installDate: '2023-01-15',
+      firmware: 'v4.2.1',
+      issues: []
+    },
+    {
+      id: 'srv-01',
+      name: 'Edge AI Server',
+      type: 'Server',
+      model: 'NVIDIA Jetson Orin',
+      location: 'Control Room',
+      status: 'Online',
+      lastPing: '2 ms ago',
+      installDate: '2023-03-20',
+      firmware: 'Ubuntu 22.04 LTS',
+      issues: []
+    },
+    {
+      id: 'cam-01',
+      name: 'Barn A - Feed Lane',
+      type: 'Camera',
+      model: 'Hikvision AI Pro',
+      location: 'Barn A',
+      status: 'Online',
+      lastPing: '12 sec ago',
+      installDate: '2023-02-10',
+      firmware: 'v5.5.8',
+      maintenanceDue: '2025-11-01',
+      issues: []
+    },
+    {
+      id: 'cam-02',
+      name: 'Barn B - Isolation',
+      type: 'Camera',
+      model: 'Hikvision AI Pro',
+      location: 'Barn B',
+      status: 'Online',
+      lastPing: '15 sec ago',
+      installDate: '2023-02-10',
+      firmware: 'v5.5.8',
+      maintenanceDue: '2025-11-01',
+      issues: []
+    },
+    {
+      id: 'cam-03',
+      name: 'Pasture Overview',
+      type: 'Camera',
+      model: 'Axis P1455-LE',
+      location: 'Pasture North',
+      status: 'Offline',
+      lastPing: '4 hours ago',
+      installDate: '2023-06-05',
+      firmware: 'v10.12.1',
+      maintenanceDue: '2025-10-25',
+      issues: ['Signal Loss', 'Check Power Supply']
+    },
+    {
+      id: 'sen-env-a1',
+      name: 'Barn A Multi-Sensor 1',
+      type: 'Sensor',
+      model: 'Dragino LHT65',
+      location: 'Barn A - Zone 1',
+      status: 'Online',
+      batteryLevel: 82,
+      lastPing: '5 min ago',
+      installDate: '2023-05-12',
+      firmware: 'v1.8',
+      issues: []
+    },
+    {
+      id: 'sen-env-a2',
+      name: 'Barn A Multi-Sensor 2',
+      type: 'Sensor',
+      model: 'Dragino LHT65',
+      location: 'Barn A - Zone 2',
+      status: 'Online',
+      batteryLevel: 12,
+      lastPing: '5 min ago',
+      installDate: '2023-05-12',
+      firmware: 'v1.8',
+      maintenanceDue: '2025-10-30',
+      issues: ['Low Battery']
+    },
+    {
+      id: 'sen-env-b1',
+      name: 'Barn B NH3 Monitor',
+      type: 'Sensor',
+      model: 'Milesight AM319',
+      location: 'Barn B - Center',
+      status: 'Maintenance',
+      batteryLevel: 45,
+      lastPing: '20 min ago',
+      installDate: '2023-08-01',
+      firmware: 'v2.1',
+      maintenanceDue: '2025-10-24', // Today/Overdue
+      issues: ['Sensor Calibration Required']
+    },
+    {
+      id: 'sen-soil-p1',
+      name: 'Pasture Soil Moisture',
+      type: 'Sensor',
+      model: 'SenseCAP S2104',
+      location: 'Pasture South',
+      status: 'Online',
+      batteryLevel: 91,
+      lastPing: '30 min ago',
+      installDate: '2024-01-10',
+      firmware: 'v1.2',
+      issues: []
+    },
+    {
+      id: 'ctrl-fan-a',
+      name: 'Barn A Ventilation Controller',
+      type: 'Controller',
+      model: 'Siemens PLC S7-1200',
+      location: 'Barn A Utility',
+      status: 'Online',
+      lastPing: '1 min ago',
+      installDate: '2022-11-15',
+      firmware: 'v4.5',
+      issues: []
+    },
+    {
+      id: 'ctrl-water-main',
+      name: 'Main Water Pump Controller',
+      type: 'Controller',
+      model: 'Espressif ESP32 Custom',
+      location: 'Pump House',
+      status: 'Error',
+      lastPing: '2 min ago',
+      installDate: '2023-09-09',
+      firmware: 'v2.0-beta',
+      maintenanceDue: '2025-10-26',
+      issues: ['Flow Rate Error', 'Check Valve']
+    },
+  ];
+};

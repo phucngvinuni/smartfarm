@@ -20,18 +20,27 @@ import AIMonitoringView from './components/AIMonitoringView';
 import DiseaseForecastView from './components/DiseaseForecastView';
 import TraceabilityView from './components/TraceabilityView';
 import ReportsView from './components/ReportsView';
-import { generateEnvironmentHistory, generateLivestockData, mockAlerts } from './services/mockData';
-import { EnvironmentData, LivestockData } from './types';
+import DevicesView from './components/DevicesView';
+import LoginView from './components/LoginView';
+import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices } from './services/mockData';
+import { EnvironmentData, LivestockData, Device } from './types';
 
 function App() {
+  // Auth State
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string>('');
+
+  // Data State
   const [envData, setEnvData] = useState<EnvironmentData[]>([]);
   const [livestockData, setLivestockData] = useState<LivestockData[]>([]);
+  const [deviceData, setDeviceData] = useState<Device[]>([]);
   const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
     // Initial data load
     setEnvData(generateEnvironmentHistory());
     setLivestockData(generateLivestockData(60)); // Generate 60 animals for the map
+    setDeviceData(generateDevices());
 
     // Simulate real-time update every 5 seconds
     const interval = setInterval(() => {
@@ -62,9 +71,29 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleLogin = (role: string) => {
+    setUserRole(role);
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserRole('');
+    setActiveTab('Overview');
+  };
+
+  if (!isLoggedIn) {
+    return <LoginView onLogin={handleLogin} />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        userRole={userRole}
+        onLogout={handleLogout}
+      />
       
       <main className="ml-64 p-8 transition-all duration-300 ease-in-out">
         {/* Header Section */}
@@ -80,9 +109,11 @@ function App() {
              <button className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg border border-slate-700 font-medium text-sm transition-all hover:shadow-lg active:scale-95">
                 Export Report
              </button>
-             <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-lg shadow-blue-500/20 transition-all hover:shadow-blue-500/40 active:scale-95 flex items-center gap-2">
-                <span>+</span> Add IoT Device
-             </button>
+             {userRole === 'Admin' && (
+                <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-lg shadow-blue-500/20 transition-all hover:shadow-blue-500/40 active:scale-95 flex items-center gap-2">
+                    <span>+</span> Add IoT Device
+                </button>
+             )}
           </div>
         </div>
 
@@ -228,6 +259,10 @@ function App() {
 
           {activeTab === 'Environment' && (
             <EnvironmentView data={envData} />
+          )}
+
+          {activeTab === 'Devices' && (
+            <DevicesView devices={deviceData} />
           )}
 
           {activeTab === 'AI Monitoring' && (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Calendar, Filter } from 'lucide-react';
 import { EnvironmentData } from '../types';
@@ -9,6 +9,29 @@ interface EnvironmentChartsProps {
 
 const EnvironmentCharts: React.FC<EnvironmentChartsProps> = ({ data }) => {
   const [timeRange, setTimeRange] = useState('24h');
+
+  // Filter data based on selected range to provide visual feedback
+  const displayData = useMemo(() => {
+    if (!data || data.length === 0) return [];
+    
+    // The mock data currently maintains a fixed size of ~25 items (representing 24h).
+    // To simulate time ranges:
+    switch (timeRange) {
+      case '12h':
+        // Show the most recent half of the data
+        return data.slice(-Math.max(5, Math.floor(data.length / 2)));
+      case '24h':
+        // Show all current data buffer (default view)
+        return data;
+      case '7d':
+        // In a real scenario, this would trigger an API call for historical data.
+        // For this UI demo, we show all data to indicate context, 
+        // but practically it looks the same as 24h unless we generated more mock data.
+        return data;
+      default:
+        return data;
+    }
+  }, [data, timeRange]);
 
   return (
     <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg h-full flex flex-col">
@@ -36,7 +59,7 @@ const EnvironmentCharts: React.FC<EnvironmentChartsProps> = ({ data }) => {
       
       <div className="flex-1 min-h-[300px] w-full relative">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <AreaChart data={displayData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3}/>
@@ -64,7 +87,7 @@ const EnvironmentCharts: React.FC<EnvironmentChartsProps> = ({ data }) => {
               strokeWidth={2}
               fillOpacity={1} 
               fill="url(#colorTemp)" 
-              animationDuration={1000}
+              animationDuration={500}
             />
             <Area 
               type="monotone" 
@@ -74,7 +97,7 @@ const EnvironmentCharts: React.FC<EnvironmentChartsProps> = ({ data }) => {
               strokeWidth={2}
               fillOpacity={1} 
               fill="url(#colorHum)" 
-              animationDuration={1000}
+              animationDuration={500}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -89,7 +112,7 @@ const EnvironmentCharts: React.FC<EnvironmentChartsProps> = ({ data }) => {
              </div>
          </div>
          <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+          <AreaChart data={displayData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="colorCo2" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
@@ -111,7 +134,7 @@ const EnvironmentCharts: React.FC<EnvironmentChartsProps> = ({ data }) => {
               strokeWidth={2}
               fillOpacity={1} 
               fill="url(#colorCo2)" 
-              animationDuration={1000}
+              animationDuration={500}
             />
           </AreaChart>
         </ResponsiveContainer>

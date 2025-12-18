@@ -10,20 +10,24 @@ import {
   Activity,
   LogOut,
   BrainCircuit,
-  ChevronRight
+  ChevronRight,
+  Cpu
 } from 'lucide-react';
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  userRole: string;
+  onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, onLogout }) => {
   const navItems = [
     { icon: LayoutDashboard, label: 'Overview' },
     { icon: Map, label: 'Farm Map' },
     { icon: Activity, label: 'Livestock Health' },
     { icon: Thermometer, label: 'Environment' },
+    { icon: Cpu, label: 'Devices' },
     { icon: Camera, label: 'AI Monitoring' },
     { icon: BrainCircuit, label: 'Disease Forecast' },
     { icon: Database, label: 'Traceability' },
@@ -75,7 +79,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
                 <Settings className="w-5 h-5 text-slate-500" />
                 Settings
             </button>
-             <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-rose-400 hover:bg-rose-500/10 transition-colors">
+             <button 
+                onClick={onLogout}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+             >
                 <LogOut className="w-5 h-5 text-slate-500" />
                 Logout
             </button>
@@ -85,12 +92,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
       <div className="p-4 border-t border-slate-800 bg-slate-900/50">
         <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer">
             <div className="relative">
-                <img src="https://picsum.photos/40" alt="Admin" className="w-9 h-9 rounded-full border border-slate-600" />
+                <img src={userRole === 'Admin' ? "https://picsum.photos/40?grayscale" : "https://images.unsplash.com/photo-1542384701-c0e46e0604a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"} alt="User" className="w-9 h-9 rounded-full border border-slate-600 object-cover" />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
             </div>
             <div>
-                <p className="text-sm font-medium text-white">Admin Farm</p>
-                <p className="text-xs text-slate-500">Super Admin</p>
+                <p className="text-sm font-medium text-white">{userRole === 'Admin' ? 'System Admin' : 'John Farmer'}</p>
+                <p className="text-xs text-slate-500">{userRole}</p>
             </div>
         </div>
       </div>
