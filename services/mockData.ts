@@ -1,4 +1,4 @@
-import { LivestockData, EnvironmentData, Alert, HealthStatus } from '../types';
+import { LivestockData, EnvironmentData, Alert, HealthStatus, LivestockHistoryPoint } from '../types';
 
 export const generateLivestockData = (count: number): LivestockData[] => {
   return Array.from({ length: count }, (_, i) => {
@@ -38,6 +38,39 @@ export const generateLivestockData = (count: number): LivestockData[] => {
       location: { x, y }
     };
   });
+};
+
+export const getLivestockHistory = (animalId: string): LivestockHistoryPoint[] => {
+    // Generate 24 hours of data
+    const history: LivestockHistoryPoint[] = [];
+    const now = new Date();
+    
+    // Base values based on a "healthy" cow, randomness added later
+    let baseTemp = 38.5;
+    let baseHR = 70;
+    
+    for (let i = 23; i >= 0; i--) {
+        const date = new Date(now.getTime() - i * 60 * 60 * 1000);
+        const hour = date.getHours();
+        
+        // Activity is lower at night (22:00 - 05:00)
+        let isNight = hour >= 22 || hour <= 5;
+        let activity = isNight ? 10 + Math.random() * 10 : 40 + Math.random() * 60;
+        
+        // HR correlates slightly with activity
+        let hr = baseHR + (activity / 10) + (Math.random() * 10 - 5);
+        
+        // Temp fluctuates slightly during day
+        let temp = baseTemp + (isNight ? -0.2 : 0.3) + (Math.random() * 0.4 - 0.2);
+
+        history.push({
+            time: `${hour}:00`,
+            temperature: parseFloat(temp.toFixed(1)),
+            heartRate: Math.round(hr),
+            activity: Math.round(activity)
+        });
+    }
+    return history;
 };
 
 export const generateEnvironmentHistory = (): EnvironmentData[] => {

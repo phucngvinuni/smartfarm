@@ -29,11 +29,14 @@ const AICameraFeed: React.FC = () => {
       </div>
       
       <div className="relative flex-1 bg-black group overflow-hidden">
-        {/* Placeholder image for livestock */}
-        <img 
-          src="https://picsum.photos/seed/cows/800/600?grayscale" 
-          alt="Livestock Camera Feed" 
-          className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700 ease-in-out"
+        {/* Real Video Feed */}
+        <video 
+          src="https://videos.pexels.com/video-files/855018/855018-hd_1920_1080_30fps.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-in-out grayscale-[10%]"
         />
         
         {/* Controls Overlay */}

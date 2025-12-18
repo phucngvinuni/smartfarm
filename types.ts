@@ -26,6 +26,13 @@ export interface LivestockData {
   location: { x: number; y: number };
 }
 
+export interface LivestockHistoryPoint {
+  time: string;
+  temperature: number;
+  heartRate: number;
+  activity: number;
+}
+
 export interface EnvironmentData {
   timestamp: string;
   temperature: number;
