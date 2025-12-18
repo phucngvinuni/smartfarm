@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Phone, Video, MessageSquare, Star, Clock, CheckCircle, FileText, AlertTriangle, ChevronRight, Stethoscope, ShieldAlert } from 'lucide-react';
 import { Expert, Consultation } from '../types';
@@ -36,7 +35,7 @@ const ExpertConsultView: React.FC<ExpertConsultViewProps> = ({ experts, consulta
                              </div>
                              <div>
                                  <h4 className="text-sm font-bold text-white">Sudden Mortality Risk</h4>
-                                 <p className="text-xs text-slate-400 mt-1">Pig #442 inactive > 4hrs, Body Temp 35°C (Hypothermia).</p>
+                                 <p className="text-xs text-slate-400 mt-1">Pig #442 inactive &gt; 4hrs, Body Temp 35°C (Hypothermia).</p>
                              </div>
                              <div className="mt-auto pt-3 border-t border-slate-700 flex gap-2">
                                  <button className="flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium py-2 rounded transition-colors flex items-center justify-center gap-2">
