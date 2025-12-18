@@ -1,0 +1,169 @@
+import React, { useState, useMemo } from 'react';
+import { LivestockData, HealthStatus } from '../types';
+import { Heart, Thermometer, Activity, X } from 'lucide-react';
+
+interface FarmMapProps {
+  data: LivestockData[];
+}
+
+const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
+  const [selectedAnimal, setSelectedAnimal] = useState<LivestockData | null>(null);
+  const [filter, setFilter] = useState<'ALL' | HealthStatus>('ALL');
+
+  const filteredData = useMemo(() => {
+    if (filter === 'ALL') return data;
+    return data.filter(d => d.status === filter);
+  }, [data, filter]);
+
+  return (
+    <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl h-[calc(100vh-10rem)] flex flex-col overflow-hidden relative">
+      {/* Map Header / Controls */}
+      <div className="absolute top-4 left-4 z-10 bg-slate-800/90 backdrop-blur-md p-2 rounded-lg border border-slate-700 shadow-lg flex gap-2">
+        <button 
+          onClick={() => setFilter('ALL')}
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'ALL' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+        >
+          ALL ({data.length})
+        </button>
+        <button 
+          onClick={() => setFilter(HealthStatus.CRITICAL)}
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-1 ${filter === HealthStatus.CRITICAL ? 'bg-rose-500 text-white' : 'bg-slate-700 text-rose-400 hover:bg-slate-600'}`}
+        >
+          CRITICAL ({data.filter(d => d.status === HealthStatus.CRITICAL).length})
+        </button>
+        <button 
+          onClick={() => setFilter(HealthStatus.WARNING)}
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-1 ${filter === HealthStatus.WARNING ? 'bg-yellow-500 text-black' : 'bg-slate-700 text-yellow-400 hover:bg-slate-600'}`}
+        >
+          WARNING ({data.filter(d => d.status === HealthStatus.WARNING).length})
+        </button>
+      </div>
+
+      {/* Map Area */}
+      <div 
+        className="relative flex-1 bg-[#0f172a] cursor-crosshair overflow-hidden group"
+        onClick={() => setSelectedAnimal(null)}
+      >
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none" 
+             style={{ backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
+        </div>
+
+        {/* Structures / Zones (Visual indicators) */}
+        {/* Barn A */}
+        <div className="absolute top-[10%] left-[10%] w-[25%] h-[30%] border-2 border-slate-600 bg-slate-800/30 rounded-lg flex items-center justify-center pointer-events-none">
+             <span className="text-slate-500 font-black text-2xl tracking-widest opacity-30 select-none">BARN A</span>
+        </div>
+        {/* Barn B */}
+        <div className="absolute top-[10%] right-[10%] w-[25%] h-[30%] border-2 border-slate-600 bg-slate-800/30 rounded-lg flex items-center justify-center pointer-events-none">
+             <span className="text-slate-500 font-black text-2xl tracking-widest opacity-30 select-none">BARN B</span>
+        </div>
+        {/* Pasture */}
+        <div className="absolute bottom-[10%] left-[10%] right-[10%] h-[35%] border-2 border-dashed border-emerald-900/50 bg-emerald-900/10 rounded-3xl flex items-center justify-center pointer-events-none">
+             <span className="text-emerald-800 font-black text-4xl tracking-widest opacity-30 select-none">GRAZING PASTURE</span>
+        </div>
+        
+        {/* Watering Hole */}
+        <div className="absolute bottom-[20%] right-[30%] w-[15%] h-[15%] bg-blue-900/20 rounded-full border border-blue-800/30 blur-sm pointer-events-none"></div>
+
+        {/* Animal Markers */}
+        {filteredData.map(animal => (
+          <div
+            key={animal.id}
+            style={{ 
+              left: `${animal.location.x}%`, 
+              top: `${animal.location.y}%`,
+              transition: 'all 1s ease-in-out'
+            }}
+            className={`absolute w-3 h-3 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg transition-transform hover:scale-[2.5] z-20 cursor-pointer ${
+              animal.status === HealthStatus.CRITICAL ? 'bg-rose-500 shadow-rose-500/50 animate-pulse' :
+              animal.status === HealthStatus.WARNING ? 'bg-yellow-400 shadow-yellow-400/50' :
+              'bg-emerald-500 shadow-emerald-500/50'
+            }`}
+            onClick={(e) => {
+                e.stopPropagation();
+                setSelectedAnimal(animal);
+            }}
+          >
+            {/* Ping effect for critical */}
+            {animal.status === HealthStatus.CRITICAL && (
+                <span className="absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75 animate-ping"></span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Detail Panel */}
+      <div className={`absolute top-4 right-4 w-72 bg-slate-800/95 backdrop-blur-xl border border-slate-600 rounded-xl shadow-2xl transition-all duration-300 transform origin-top-right z-30 ${selectedAnimal ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
+        {selectedAnimal && (
+            <div className="p-5">
+                <div className="flex justify-between items-start mb-4">
+                    <div>
+                        <h4 className="text-lg font-bold text-white flex items-center gap-2">
+                           <span className="bg-blue-600 text-[10px] px-1.5 py-0.5 rounded text-white uppercase">{selectedAnimal.type}</span>
+                           #{selectedAnimal.tagId}
+                        </h4>
+                        <p className="text-xs text-slate-400">Last update: {selectedAnimal.lastUpdate}</p>
+                    </div>
+                    <button onClick={() => setSelectedAnimal(null)} className="text-slate-400 hover:text-white">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+                
+                <div className="space-y-4">
+                    <div className="bg-slate-700/50 rounded-lg p-3 flex items-center justify-between">
+                         <div className="flex items-center gap-2 text-slate-300">
+                             <Heart className="w-4 h-4 text-rose-400" />
+                             <span className="text-sm">Status</span>
+                         </div>
+                         <span className={`text-sm font-bold px-2 py-0.5 rounded ${
+                             selectedAnimal.status === HealthStatus.CRITICAL ? 'bg-rose-500/20 text-rose-400' :
+                             selectedAnimal.status === HealthStatus.WARNING ? 'bg-yellow-500/20 text-yellow-400' :
+                             'bg-emerald-500/20 text-emerald-400'
+                         }`}>
+                             {selectedAnimal.status}
+                         </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                         <div className="bg-slate-700/30 rounded-lg p-3">
+                             <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-1">
+                                 <Thermometer className="w-3.5 h-3.5" />
+                                 Temp
+                             </div>
+                             <span className="text-lg font-semibold text-white">{selectedAnimal.temperature.toFixed(1)}°C</span>
+                         </div>
+                         <div className="bg-slate-700/30 rounded-lg p-3">
+                             <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-1">
+                                 <Activity className="w-3.5 h-3.5" />
+                                 HR
+                             </div>
+                             <span className="text-lg font-semibold text-white">{selectedAnimal.heartRate} bpm</span>
+                         </div>
+                    </div>
+
+                    <div className="bg-slate-700/30 rounded-lg p-3">
+                         <div className="flex justify-between items-center text-xs text-slate-400 mb-2">
+                             <span>Activity Level</span>
+                             <span>{selectedAnimal.activityLevel}%</span>
+                         </div>
+                         <div className="w-full bg-slate-600 h-1.5 rounded-full overflow-hidden">
+                             <div 
+                                className={`h-full rounded-full ${selectedAnimal.activityLevel < 30 ? 'bg-rose-500' : 'bg-blue-500'}`} 
+                                style={{ width: `${selectedAnimal.activityLevel}%` }}
+                             ></div>
+                         </div>
+                    </div>
+                    
+                    <button className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-sm font-medium transition-colors">
+                        View Full History
+                    </button>
+                </div>
+            </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FarmMap;
