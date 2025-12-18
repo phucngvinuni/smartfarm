@@ -25,10 +25,13 @@ export const generateLivestockData = (count: number): LivestockData[] => {
         y = 57 + Math.random() * 31; // 57% to 88%
     }
 
+    const types: ('Cow' | 'Pig' | 'Chicken')[] = ['Cow', 'Pig', 'Chicken'];
+    const animalType = types[Math.floor(Math.random() * types.length)];
+
     return {
       id: `animal-${i}`,
       tagId: `VN-${1000 + i}`,
-      type: 'Cow',
+      type: animalType,
       temperature: 38 + (Math.random() * 1.5) + (isSick ? 1.5 : 0),
       heartRate: 60 + Math.floor(Math.random() * 20) + (isSick ? 20 : 0),
       activityLevel: isSick ? Math.floor(Math.random() * 30) : 50 + Math.floor(Math.random() * 50),

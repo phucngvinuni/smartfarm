@@ -11,12 +11,21 @@ interface FarmMapProps {
 const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
   const [selectedAnimal, setSelectedAnimal] = useState<LivestockData | null>(null);
   const [historyData, setHistoryData] = useState<LivestockHistoryPoint[]>([]);
-  const [filter, setFilter] = useState<'ALL' | HealthStatus>('ALL');
+  const [filter, setFilter] = useState<string>('ALL');
   const [activeTab, setActiveTab] = useState<'overview' | 'trends'>('overview');
+
+  const counts = useMemo(() => ({
+    ALL: data.length,
+    CRITICAL: data.filter(d => d.status === HealthStatus.CRITICAL).length,
+    WARNING: data.filter(d => d.status === HealthStatus.WARNING).length,
+    Cow: data.filter(d => d.type === 'Cow').length,
+    Pig: data.filter(d => d.type === 'Pig').length,
+    Chicken: data.filter(d => d.type === 'Chicken').length,
+  }), [data]);
 
   const filteredData = useMemo(() => {
     if (filter === 'ALL') return data;
-    return data.filter(d => d.status === filter);
+    return data.filter(d => d.status === filter || d.type === filter);
   }, [data, filter]);
 
   // Fetch history when an animal is selected
@@ -32,24 +41,46 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
   return (
     <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl h-[calc(100vh-10rem)] flex flex-col overflow-hidden relative">
       {/* Map Header / Controls */}
-      <div className="absolute top-4 left-4 z-10 bg-slate-800/90 backdrop-blur-md p-2 rounded-lg border border-slate-700 shadow-lg flex gap-2">
+      <div className="absolute top-4 left-4 z-10 bg-slate-800/90 backdrop-blur-md p-2 rounded-lg border border-slate-700 shadow-lg flex gap-2 items-center">
         <button 
           onClick={() => setFilter('ALL')}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'ALL' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
         >
-          ALL ({data.length})
+          ALL ({counts.ALL})
         </button>
         <button 
           onClick={() => setFilter(HealthStatus.CRITICAL)}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-1 ${filter === HealthStatus.CRITICAL ? 'bg-rose-500 text-white' : 'bg-slate-700 text-rose-400 hover:bg-slate-600'}`}
         >
-          CRITICAL ({data.filter(d => d.status === HealthStatus.CRITICAL).length})
+          CRITICAL ({counts.CRITICAL})
         </button>
         <button 
           onClick={() => setFilter(HealthStatus.WARNING)}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-1 ${filter === HealthStatus.WARNING ? 'bg-yellow-500 text-black' : 'bg-slate-700 text-yellow-400 hover:bg-slate-600'}`}
         >
-          WARNING ({data.filter(d => d.status === HealthStatus.WARNING).length})
+          WARNING ({counts.WARNING})
+        </button>
+
+        {/* Separator */}
+        <div className="w-px h-5 bg-slate-600 mx-1"></div>
+
+        <button 
+          onClick={() => setFilter('Cow')}
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'Cow' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+        >
+          COW ({counts.Cow})
+        </button>
+        <button 
+          onClick={() => setFilter('Pig')}
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'Pig' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+        >
+          PIG ({counts.Pig})
+        </button>
+        <button 
+          onClick={() => setFilter('Chicken')}
+          className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'Chicken' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+        >
+          CHICKEN ({counts.Chicken})
         </button>
       </div>
 
@@ -89,10 +120,14 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
               top: `${animal.location.y}%`,
               transition: 'all 1s ease-in-out'
             }}
-            className={`absolute w-3 h-3 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg transition-transform hover:scale-[2.5] z-20 cursor-pointer ${
+            className={`absolute rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg transition-transform hover:scale-[2.5] z-20 cursor-pointer flex items-center justify-center ${
               animal.status === HealthStatus.CRITICAL ? 'bg-rose-500 shadow-rose-500/50 animate-pulse' :
               animal.status === HealthStatus.WARNING ? 'bg-yellow-400 shadow-yellow-400/50' :
               'bg-emerald-500 shadow-emerald-500/50'
+            } ${
+                // Size differentiation based on type
+                animal.type === 'Chicken' ? 'w-2 h-2' : 
+                animal.type === 'Pig' ? 'w-2.5 h-2.5' : 'w-3 h-3'
             }`}
             onClick={(e) => {
                 e.stopPropagation();
@@ -121,7 +156,7 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
                             </h4>
                             <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
                                 <Clock className="w-3 h-3" />
-                                Last update: {selectedAnimal.lastUpdate}
+                                Last update: <span className="text-slate-200 font-mono">{selectedAnimal.lastUpdate}</span>
                             </p>
                         </div>
                         <button onClick={() => setSelectedAnimal(null)} className="text-slate-400 hover:text-white">

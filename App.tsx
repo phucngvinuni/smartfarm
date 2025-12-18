@@ -42,9 +42,10 @@ function App() {
             return [...prev.slice(1), newData];
         });
         
-        // Simulate livestock movement slightly
+        // Simulate livestock movement slightly and update timestamp
         setLivestockData(prev => prev.map(animal => ({
             ...animal,
+            lastUpdate: new Date().toLocaleTimeString(),
             location: {
                 x: Math.max(0, Math.min(100, animal.location.x + (Math.random() - 0.5) * 2)),
                 y: Math.max(0, Math.min(100, animal.location.y + (Math.random() - 0.5) * 2))
