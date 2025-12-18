@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { LivestockData, HealthStatus, LivestockHistoryPoint } from '../types';
 import { Heart, Thermometer, Activity, X, TrendingUp, Clock } from 'lucide-react';
@@ -39,9 +40,9 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
   }, [selectedAnimal]);
 
   return (
-    <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl h-[calc(100vh-10rem)] flex flex-col overflow-hidden relative">
+    <div className="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl h-[calc(100vh-12rem)] md:h-[calc(100vh-10rem)] flex flex-col overflow-hidden relative">
       {/* Map Header / Controls */}
-      <div className="absolute top-4 left-4 z-10 bg-slate-800/90 backdrop-blur-md p-2 rounded-lg border border-slate-700 shadow-lg flex gap-2 items-center">
+      <div className="absolute top-4 left-4 z-10 bg-slate-800/90 backdrop-blur-md p-2 rounded-lg border border-slate-700 shadow-lg flex gap-2 items-center flex-wrap max-w-[80%] md:max-w-none">
         <button 
           onClick={() => setFilter('ALL')}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'ALL' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
@@ -52,17 +53,17 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
           onClick={() => setFilter(HealthStatus.CRITICAL)}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-1 ${filter === HealthStatus.CRITICAL ? 'bg-rose-500 text-white' : 'bg-slate-700 text-rose-400 hover:bg-slate-600'}`}
         >
-          CRITICAL ({counts.CRITICAL})
+          CRIT ({counts.CRITICAL})
         </button>
         <button 
           onClick={() => setFilter(HealthStatus.WARNING)}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all flex items-center gap-1 ${filter === HealthStatus.WARNING ? 'bg-yellow-500 text-black' : 'bg-slate-700 text-yellow-400 hover:bg-slate-600'}`}
         >
-          WARNING ({counts.WARNING})
+          WARN ({counts.WARNING})
         </button>
 
         {/* Separator */}
-        <div className="w-px h-5 bg-slate-600 mx-1"></div>
+        <div className="w-px h-5 bg-slate-600 mx-1 hidden md:block"></div>
 
         <button 
           onClick={() => setFilter('Cow')}
@@ -80,7 +81,7 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
           onClick={() => setFilter('Chicken')}
           className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${filter === 'Chicken' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
         >
-          CHICKEN ({counts.Chicken})
+          CHK ({counts.Chicken})
         </button>
       </div>
 
@@ -97,15 +98,15 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
         {/* Structures / Zones (Visual indicators) */}
         {/* Barn A */}
         <div className="absolute top-[10%] left-[10%] w-[25%] h-[30%] border-2 border-slate-600 bg-slate-800/30 rounded-lg flex items-center justify-center pointer-events-none">
-             <span className="text-slate-500 font-black text-2xl tracking-widest opacity-30 select-none">BARN A</span>
+             <span className="text-slate-500 font-black text-xl md:text-2xl tracking-widest opacity-30 select-none text-center">BARN A</span>
         </div>
         {/* Barn B */}
         <div className="absolute top-[10%] right-[10%] w-[25%] h-[30%] border-2 border-slate-600 bg-slate-800/30 rounded-lg flex items-center justify-center pointer-events-none">
-             <span className="text-slate-500 font-black text-2xl tracking-widest opacity-30 select-none">BARN B</span>
+             <span className="text-slate-500 font-black text-xl md:text-2xl tracking-widest opacity-30 select-none text-center">BARN B</span>
         </div>
         {/* Pasture */}
         <div className="absolute bottom-[10%] left-[10%] right-[10%] h-[35%] border-2 border-dashed border-emerald-900/50 bg-emerald-900/10 rounded-3xl flex items-center justify-center pointer-events-none">
-             <span className="text-emerald-800 font-black text-4xl tracking-widest opacity-30 select-none">GRAZING PASTURE</span>
+             <span className="text-emerald-800 font-black text-2xl md:text-4xl tracking-widest opacity-30 select-none text-center">GRAZING PASTURE</span>
         </div>
         
         {/* Watering Hole */}
@@ -143,7 +144,12 @@ const FarmMap: React.FC<FarmMapProps> = ({ data }) => {
       </div>
 
       {/* Detail Panel */}
-      <div className={`absolute top-4 right-4 w-80 bg-slate-800/95 backdrop-blur-xl border border-slate-600 rounded-xl shadow-2xl transition-all duration-300 transform origin-top-right z-30 max-h-[calc(100%-2rem)] flex flex-col ${selectedAnimal ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}>
+      <div className={`
+        absolute z-30 transition-all duration-300 transform origin-top-right flex flex-col bg-slate-800/95 backdrop-blur-xl border border-slate-600 shadow-2xl
+        md:top-4 md:right-4 md:w-80 md:rounded-xl md:max-h-[calc(100%-2rem)]
+        bottom-0 left-0 w-full rounded-t-xl max-h-[60%]
+        ${selectedAnimal ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}
+      `}>
         {selectedAnimal && (
             <div className="flex flex-col h-full">
                 {/* Panel Header */}

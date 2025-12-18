@@ -1,5 +1,5 @@
 
-import { LivestockData, EnvironmentData, Alert, HealthStatus, LivestockHistoryPoint, Device } from '../types';
+import { LivestockData, EnvironmentData, Alert, HealthStatus, LivestockHistoryPoint, Device, Expert, Consultation } from '../types';
 
 export const generateLivestockData = (count: number): LivestockData[] => {
   return Array.from({ length: count }, (_, i) => {
@@ -274,3 +274,80 @@ export const generateDevices = (): Device[] => {
     },
   ];
 };
+
+export const mockExperts: Expert[] = [
+  {
+    id: 'exp-1',
+    name: 'Dr. Sarah Nguyen',
+    role: 'Veterinarian',
+    specialization: 'Large Animal Medicine',
+    status: 'Online',
+    rating: 4.9,
+    imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200'
+  },
+  {
+    id: 'exp-2',
+    name: 'Dr. Michael Chen',
+    role: 'Biosecurity Specialist',
+    specialization: 'Epidemiology & Farm Safety',
+    status: 'Online',
+    rating: 4.8,
+    imageUrl: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200'
+  },
+  {
+    id: 'exp-3',
+    name: 'Dr. Emily Watson',
+    role: 'Veterinarian',
+    specialization: 'Poultry Health',
+    status: 'Busy',
+    rating: 4.7,
+    imageUrl: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=200'
+  }
+];
+
+export const mockConsultations: Consultation[] = [
+  {
+    id: 'cons-102',
+    expertId: 'exp-2',
+    expertName: 'Dr. Michael Chen',
+    date: '2025-10-25 09:30 AM',
+    subject: 'Abnormal NH3 Spike in Barn A',
+    status: 'Resolved',
+    attachedData: 'Env Sensor Log #402',
+    diagnosis: 'Ventilation failure causing ammonia buildup.',
+    protocol: [
+        'Immediate: Open side curtains manually.',
+        'Reset Fan Controller A (Error code 503).',
+        'Schedule sensor recalibration.'
+    ]
+  },
+  {
+    id: 'cons-101',
+    expertId: 'exp-1',
+    expertName: 'Dr. Sarah Nguyen',
+    date: '2025-10-24 02:15 PM',
+    subject: 'Cow #1024 Lameness Check',
+    status: 'Resolved',
+    attachedData: 'Video Clip #291 + Gait Analysis',
+    diagnosis: 'Early stage foot rot confirmed.',
+    protocol: [
+        'Isolate Cow #1024 to Barn B.',
+        'Administer antibiotic treatment (Oxytetracycline).',
+        'Clean and disinfect Barn A flooring.'
+    ]
+  },
+  {
+    id: 'cons-103',
+    expertId: 'exp-1',
+    expertName: 'Dr. Sarah Nguyen',
+    date: '2025-10-26 10:00 AM',
+    subject: 'Pig #502 Lethargy',
+    status: 'In Progress',
+    attachedData: 'Thermal Cam Img + Vitals',
+    diagnosis: 'Pending lab results.',
+    protocol: [
+        'Monitor temperature every 4 hours.',
+        'Ensure access to clean water.'
+    ]
+  }
+];

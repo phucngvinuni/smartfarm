@@ -67,3 +67,25 @@ export interface Device {
   maintenanceDue?: string; // ISO Date
   issues?: string[];
 }
+
+export interface Expert {
+  id: string;
+  name: string;
+  role: 'Veterinarian' | 'Biosecurity Specialist';
+  specialization: string;
+  status: 'Online' | 'Busy' | 'Offline';
+  rating: number;
+  imageUrl: string;
+}
+
+export interface Consultation {
+  id: string;
+  expertId: string;
+  expertName: string;
+  date: string;
+  subject: string;
+  status: 'Resolved' | 'In Progress' | 'Pending Review';
+  diagnosis?: string;
+  protocol?: string[]; // Steps for the farmer to take
+  attachedData: string; // e.g., "Cow #1024 Video + Vitals"
+}

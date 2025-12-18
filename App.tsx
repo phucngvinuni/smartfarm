@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Activity, 
@@ -6,7 +7,8 @@ import {
   Wind, 
   Users, 
   AlertOctagon,
-  Cpu
+  Cpu,
+  Menu
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import StatCard from './components/StatCard';
@@ -22,18 +24,28 @@ import TraceabilityView from './components/TraceabilityView';
 import ReportsView from './components/ReportsView';
 import DevicesView from './components/DevicesView';
 import LoginView from './components/LoginView';
-import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices } from './services/mockData';
-import { EnvironmentData, LivestockData, Device } from './types';
+import ExpertConsultView from './components/ExpertConsultView';
+import ChatWindow from './components/ChatWindow';
+import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices, mockExperts, mockConsultations } from './services/mockData';
+import { EnvironmentData, LivestockData, Device, Expert, Consultation } from './types';
 
 function App() {
   // Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string>('');
 
+  // Mobile Menu State
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Chat State
+  const [activeChatExpert, setActiveChatExpert] = useState<Expert | null>(null);
+
   // Data State
   const [envData, setEnvData] = useState<EnvironmentData[]>([]);
   const [livestockData, setLivestockData] = useState<LivestockData[]>([]);
   const [deviceData, setDeviceData] = useState<Device[]>([]);
+  const [expertData, setExpertData] = useState<Expert[]>([]);
+  const [consultationData, setConsultationData] = useState<Consultation[]>([]);
   const [activeTab, setActiveTab] = useState('Overview');
 
   useEffect(() => {
@@ -41,6 +53,8 @@ function App() {
     setEnvData(generateEnvironmentHistory());
     setLivestockData(generateLivestockData(60)); // Generate 60 animals for the map
     setDeviceData(generateDevices());
+    setExpertData(mockExperts);
+    setConsultationData(mockConsultations);
 
     // Simulate real-time update every 5 seconds
     const interval = setInterval(() => {
@@ -87,30 +101,48 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30 relative">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         userRole={userRole}
         onLogout={handleLogout}
+        isMobileOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
       
-      <main className="ml-64 p-8 transition-all duration-300 ease-in-out">
+      <main className="md:ml-64 p-4 md:p-8 transition-all duration-300 ease-in-out">
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-800 backdrop-blur-md">
+             <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <Activity className="w-5 h-5 text-white" />
+                 </div>
+                 <h1 className="text-xl font-bold text-white tracking-tight">SmartFarm</h1>
+             </div>
+             <button 
+                onClick={() => setIsMobileMenuOpen(true)} 
+                className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200 transition-colors"
+             >
+                 <Menu className="w-6 h-6" />
+             </button>
+        </div>
+
         {/* Header Section */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">{activeTab}</h2>
-            <p className="text-slate-400 flex items-center gap-2 text-sm">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{activeTab}</h2>
+            <p className="text-slate-400 flex items-center gap-2 text-xs md:text-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span>
               System operating normally • Last updated: Just now
             </p>
           </div>
-          <div className="flex gap-3">
-             <button className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg border border-slate-700 font-medium text-sm transition-all hover:shadow-lg active:scale-95">
+          <div className="flex gap-3 w-full md:w-auto">
+             <button className="flex-1 md:flex-none bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg border border-slate-700 font-medium text-sm transition-all hover:shadow-lg active:scale-95 text-center">
                 Export Report
              </button>
              {userRole === 'Admin' && (
-                <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-lg shadow-blue-500/20 transition-all hover:shadow-blue-500/40 active:scale-95 flex items-center gap-2">
+                <button className="flex-1 md:flex-none bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-lg shadow-blue-500/20 transition-all hover:shadow-blue-500/40 active:scale-95 flex items-center justify-center gap-2">
                     <span>+</span> Add IoT Device
                 </button>
              )}
@@ -118,7 +150,7 @@ function App() {
         </div>
 
         {/* Dynamic Content Rendering */}
-        <div className="animate-in fade-in duration-500">
+        <div className="animate-in fade-in duration-500 pb-10">
           {activeTab === 'Overview' && (
             <>
               {/* Top Stats Row */}
@@ -162,12 +194,12 @@ function App() {
               {/* Main Content Grid - Middle Row */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 {/* Main Chart */}
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2 min-h-[400px]">
                   <EnvironmentCharts data={envData} />
                 </div>
 
                 {/* Alert Feed */}
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 min-h-[400px]">
                   <AlertList alerts={mockAlerts} />
                 </div>
               </div>
@@ -268,6 +300,14 @@ function App() {
           {activeTab === 'AI Monitoring' && (
             <AIMonitoringView />
           )}
+          
+          {activeTab === 'Expert Consult' && (
+            <ExpertConsultView 
+                experts={expertData} 
+                consultations={consultationData} 
+                onChatStart={setActiveChatExpert}
+            />
+          )}
 
           {activeTab === 'Disease Forecast' && (
             <DiseaseForecastView />
@@ -282,6 +322,14 @@ function App() {
           )}
         </div>
       </main>
+
+      {/* Global Chat Overlay */}
+      {activeChatExpert && (
+        <ChatWindow 
+            expert={activeChatExpert} 
+            onClose={() => setActiveChatExpert(null)} 
+        />
+      )}
     </div>
   );
 }
