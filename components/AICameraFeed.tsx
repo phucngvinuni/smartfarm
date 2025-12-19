@@ -29,14 +29,14 @@ const AICameraFeed: React.FC = () => {
       </div>
       
       <div className="relative flex-1 bg-black group overflow-hidden">
-        {/* Real Video Feed */}
+        {/* Real Video Feed - Cows in Barn */}
         <video 
-          src="https://videos.pexels.com/video-files/855018/855018-hd_1920_1080_30fps.mp4"
+          src="https://videos.pexels.com/video-files/5848577/5848577-hd_1920_1080_30fps.mp4"
           autoPlay
           muted
           loop
           playsInline
-          className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-in-out grayscale-[10%]"
+          className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 ease-in-out"
         />
         
         {/* Controls Overlay */}

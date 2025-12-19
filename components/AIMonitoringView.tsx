@@ -12,17 +12,18 @@ const AIMonitoringView: React.FC = () => {
             <AICameraFeed />
         </div>
         
-        {/* Mock other cameras with static content for now, ideally reused components */}
+        {/* Other Cameras */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
-            <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2">
+            <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                CAM-02 (Barn A)
+                CAM-02 (Barn A - Pigs)
             </div>
-            <Video className="w-12 h-12 text-slate-700" />
+            <Video className="w-12 h-12 text-slate-700 absolute z-0" />
             <div className="absolute inset-0 bg-slate-800/50 flex items-center justify-center">
-                 <img src="https://images.pexels.com/photos/422218/pexels-photo-422218.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feed" className="w-full h-full object-cover opacity-40 grayscale" />
+                 {/* Image of Pigs */}
+                 <img src="https://images.unsplash.com/photo-1604804682467-3323089d10e5?q=80&w=600&auto=format&fit=crop" alt="Pigs Feed" className="w-full h-full object-cover opacity-80" />
             </div>
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10">
                 <div className="bg-black/60 backdrop-blur rounded p-2 text-xs">
                     <div className="text-slate-400">Analysis</div>
                     <div className="text-emerald-400 font-bold">Normal Behavior</div>
@@ -31,12 +32,13 @@ const AIMonitoringView: React.FC = () => {
         </div>
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
-             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2">
+             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                 CAM-03 (Entry Gate)
             </div>
              <div className="absolute inset-0 bg-slate-800/50 flex items-center justify-center">
-                 <img src="https://images.pexels.com/photos/2252569/pexels-photo-2252569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feed" className="w-full h-full object-cover opacity-40 grayscale" />
+                 {/* Image of Farm Gate/Cows */}
+                 <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=600&auto=format&fit=crop" alt="Gate Feed" className="w-full h-full object-cover opacity-80" />
             </div>
             {/* Detection Box */}
             <div className="absolute top-1/2 left-1/3 w-1/4 h-1/3 border-2 border-blue-500 rounded">
@@ -45,14 +47,15 @@ const AIMonitoringView: React.FC = () => {
         </div>
 
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
-             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2">
+             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
                 <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
                 CAM-04 (Isolation)
             </div>
              <div className="absolute inset-0 bg-slate-800/50 flex items-center justify-center">
-                 <img src="https://images.pexels.com/photos/1117268/pexels-photo-1117268.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feed" className="w-full h-full object-cover opacity-40 grayscale" />
+                 {/* Close up of cow */}
+                 <img src="https://images.unsplash.com/photo-1541600383005-565c949cf777?q=80&w=600&auto=format&fit=crop" alt="Isolation Feed" className="w-full h-full object-cover opacity-80" />
             </div>
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center z-10">
                 <div className="bg-black/70 backdrop-blur-sm p-4 rounded-xl border border-rose-500/30 flex flex-col items-center">
                     <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
                     <span className="text-rose-400 font-bold">Motion Detected</span>
