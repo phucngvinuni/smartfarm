@@ -12,54 +12,64 @@ const AIMonitoringView: React.FC = () => {
             <AICameraFeed />
         </div>
         
-        {/* Other Cameras */}
+        {/* CAM-01 (Zone B - Pigs) - Fixed View */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                CAM-02 (Barn A - Pigs)
+                CAM-01 (Zone B - Pigs)
             </div>
-            <Video className="w-12 h-12 text-slate-700 absolute z-0" />
-            <div className="absolute inset-0 bg-slate-800/50 flex items-center justify-center">
-                 {/* Image of Pigs */}
-                 <img src="https://images.unsplash.com/photo-1604804682467-3323089d10e5?q=80&w=600&auto=format&fit=crop" alt="Pigs Feed" className="w-full h-full object-cover opacity-80" />
-            </div>
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10">
-                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs">
-                    <div className="text-slate-400">Analysis</div>
-                    <div className="text-emerald-400 font-bold">Normal Behavior</div>
+            <iframe
+                src="https://player.cloudinary.com/embed/?cloud_name=ddm2hzdhy&public_id=1219_nrqwb3&profile=cld-default"
+                className="w-full h-full object-cover border-0"
+                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                allowFullScreen
+            />
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10 pointer-events-none">
+                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs border border-white/10">
+                    <div className="text-slate-400 text-[10px] uppercase">Status</div>
+                    <div className="text-emerald-400 font-bold">Monitoring Active</div>
                 </div>
             </div>
         </div>
 
+        {/* CAM-02 (Zone A - Cows) - Fixed View */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
              <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                CAM-03 (Entry Gate)
+                CAM-02 (Zone A - Cows)
             </div>
-             <div className="absolute inset-0 bg-slate-800/50 flex items-center justify-center">
-                 {/* Image of Farm Gate/Cows */}
-                 <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=600&auto=format&fit=crop" alt="Gate Feed" className="w-full h-full object-cover opacity-80" />
-            </div>
-            {/* Detection Box */}
-            <div className="absolute top-1/2 left-1/3 w-1/4 h-1/3 border-2 border-blue-500 rounded">
-                <div className="absolute -top-6 left-0 bg-blue-500 text-white text-[10px] px-1 rounded">Staff: #412</div>
+            <iframe
+                src="https://player.cloudinary.com/embed/?cloud_name=ddm2hzdhy&public_id=1219_1_bzdacc&profile=cld-default"
+                className="w-full h-full object-cover border-0"
+                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                allowFullScreen
+            />
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10 pointer-events-none">
+                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs border border-white/10">
+                    <div className="text-slate-400 text-[10px] uppercase">Behavior</div>
+                    <div className="text-blue-400 font-bold">Feeding (Normal)</div>
+                </div>
             </div>
         </div>
 
+        {/* CAM-03 (Zone C - Poultry) - Fixed View */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
              <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
-                <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
-                CAM-04 (Isolation)
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                CAM-03 (Zone C - Poultry)
             </div>
-             <div className="absolute inset-0 bg-slate-800/50 flex items-center justify-center">
-                 {/* Close up of cow */}
-                 <img src="https://images.unsplash.com/photo-1541600383005-565c949cf777?q=80&w=600&auto=format&fit=crop" alt="Isolation Feed" className="w-full h-full object-cover opacity-80" />
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-                <div className="bg-black/70 backdrop-blur-sm p-4 rounded-xl border border-rose-500/30 flex flex-col items-center">
-                    <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
-                    <span className="text-rose-400 font-bold">Motion Detected</span>
-                    <span className="text-xs text-slate-400">Restricted Area</span>
+             <video 
+                src="https://videos.pexels.com/video-files/5848564/5848564-uhd_2560_1440_25fps.mp4" 
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover opacity-90"
+            />
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10 pointer-events-none">
+                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs border border-white/10">
+                    <div className="text-slate-400 text-[10px] uppercase">Density</div>
+                    <div className="text-yellow-400 font-bold">High Activity</div>
                 </div>
             </div>
         </div>
@@ -101,7 +111,7 @@ const AIMonitoringView: React.FC = () => {
                 <p className="text-sm text-slate-300 font-medium mb-2">Cow #1024 - Eating duration normal (45 mins)</p>
                 <div className="flex items-center gap-2 text-xs text-slate-500">
                     <Video className="w-3 h-3" />
-                    AI Camera 01
+                    AI Camera 02
                 </div>
             </div>
             
@@ -115,7 +125,7 @@ const AIMonitoringView: React.FC = () => {
                 <p className="text-sm text-slate-300 font-medium mb-2">Zone B Headcount: 12 (Match)</p>
                 <div className="flex items-center gap-2 text-xs text-slate-500">
                     <Video className="w-3 h-3" />
-                    AI Camera 02
+                    AI Camera 01
                 </div>
             </div>
         </div>
