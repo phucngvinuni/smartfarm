@@ -118,7 +118,7 @@ const HealthPassportView: React.FC = () => {
                                 <ShieldCheck className="w-10 h-10" />
                                 <div>
                                     <h1 className="text-2xl font-bold tracking-tight uppercase">Health Passport</h1>
-                                    <p className="text-xs opacity-80 uppercase tracking-widest">Republic of Vietnam • Livestock Registry</p>
+                                    <p className="text-xs opacity-80 uppercase tracking-widest">Livestock Registry</p>
                                 </div>
                             </div>
                             <div className="text-right">
