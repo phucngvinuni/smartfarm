@@ -13,8 +13,7 @@ import {
   ChevronRight,
   Cpu,
   Stethoscope,
-  X,
-  Leaf
+  X
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -61,11 +60,30 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
       `}>
         <div className="p-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/50 bg-slate-50 dark:bg-[#0a1018]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#0B7D35] to-[#0D577C] rounded-xl flex items-center justify-center shadow-lg shadow-[#0E6565]/20">
-                <Leaf className="w-6 h-6 text-white" />
+            {/* Custom Aura AI Logo */}
+            <div className="w-10 h-10 flex items-center justify-center">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                    {/* Connections */}
+                    <path d="M35 55 L65 30" stroke="currentColor" strokeWidth="3" className="text-slate-400 dark:text-slate-600" />
+                    <path d="M35 55 L80 50" stroke="currentColor" strokeWidth="3" className="text-slate-400 dark:text-slate-600" />
+                    <path d="M35 55 L70 75" stroke="currentColor" strokeWidth="3" className="text-slate-400 dark:text-slate-600" />
+                    
+                    {/* Nodes */}
+                    <circle cx="35" cy="55" r="14" fill="url(#grad-main)" />
+                    <circle cx="65" cy="30" r="8" fill="#0D577C" />
+                    <circle cx="80" cy="50" r="7" fill="#0D577C" />
+                    <circle cx="70" cy="75" r="8" fill="#0D577C" />
+                    
+                    <defs>
+                        <linearGradient id="grad-main" x1="20" y1="55" x2="50" y2="55" gradientUnits="userSpaceOnUse">
+                            <stop stopColor="#0B7D35" />
+                            <stop offset="1" stopColor="#10b981" />
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
             <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">AuraFarm</h1>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">Aura AI</h1>
                 <span className="text-[10px] font-bold text-[#0E6565] tracking-widest mt-1">INTELLIGENCE</span>
             </div>
           </div>

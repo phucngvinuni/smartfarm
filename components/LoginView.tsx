@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, User, Lock, ArrowRight, Sprout, Tractor, Leaf } from 'lucide-react';
+import { Activity, User, Lock, ArrowRight, Sprout } from 'lucide-react';
 
 interface LoginViewProps {
   onLogin: (role: string) => void;
@@ -42,10 +42,19 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
         <div className="md:w-1/2 p-10 flex flex-col justify-between bg-gradient-to-br from-[#0D577C]/40 to-[#0B7D35]/10 border-r border-white/5">
           <div>
             <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#0B7D35] to-[#0D577C] rounded-xl flex items-center justify-center shadow-lg shadow-[#0B7D35]/30">
-                    <Leaf className="w-7 h-7 text-white" />
+                <div className="w-12 h-12 flex items-center justify-center">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                        <path d="M35 55 L65 30" stroke="white" strokeOpacity="0.5" strokeWidth="3" />
+                        <path d="M35 55 L80 50" stroke="white" strokeOpacity="0.5" strokeWidth="3" />
+                        <path d="M35 55 L70 75" stroke="white" strokeOpacity="0.5" strokeWidth="3" />
+                        
+                        <circle cx="35" cy="55" r="14" fill="#0B7D35" />
+                        <circle cx="65" cy="30" r="8" fill="#0D577C" />
+                        <circle cx="80" cy="50" r="7" fill="#0D577C" />
+                        <circle cx="70" cy="75" r="8" fill="#0D577C" />
+                    </svg>
                 </div>
-                <h1 className="text-3xl font-bold text-white tracking-tight">AuraFarm</h1>
+                <h1 className="text-3xl font-bold text-white tracking-tight">Aura AI</h1>
             </div>
             
             <h2 className="text-3xl font-bold text-white mb-4">
@@ -53,7 +62,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0B7D35] to-[#4ade80]">Naturally.</span>
             </h2>
             <p className="text-slate-300 leading-relaxed font-light">
-              Next-generation livestock monitoring powered by AuraAI. Seamlessly integrating environmental data with animal health metrics.
+              Next-generation livestock monitoring powered by Aura AI. Seamlessly integrating environmental data with animal health metrics.
             </p>
           </div>
 
@@ -151,7 +160,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
           </form>
 
           <div className="mt-8 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
-            AuraFarm Systems • <span className="text-[#0B7D35] font-medium">Secure Connection</span>
+            Aura AI Systems • <span className="text-[#0B7D35] font-medium">Secure Connection</span>
           </div>
         </div>
       </div>

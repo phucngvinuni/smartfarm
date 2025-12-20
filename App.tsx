@@ -7,8 +7,7 @@ import {
   Users, 
   AlertOctagon,
   Cpu,
-  Menu,
-  Leaf
+  Menu
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import StatCard from './components/StatCard';
@@ -133,10 +132,19 @@ function App() {
         {/* Mobile Header */}
         <div className="md:hidden flex items-center justify-between mb-6 bg-white/80 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 backdrop-blur-md shadow-sm">
              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 bg-gradient-to-r from-[#0B7D35] to-[#0D577C] rounded-lg flex items-center justify-center">
-                    <Leaf className="w-5 h-5 text-white" />
+                 <div className="w-8 h-8 flex items-center justify-center">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                        <path d="M35 55 L65 30" stroke="currentColor" strokeWidth="4" className="text-slate-400 dark:text-slate-600" />
+                        <path d="M35 55 L80 50" stroke="currentColor" strokeWidth="4" className="text-slate-400 dark:text-slate-600" />
+                        <path d="M35 55 L70 75" stroke="currentColor" strokeWidth="4" className="text-slate-400 dark:text-slate-600" />
+                        
+                        <circle cx="35" cy="55" r="14" fill="#0B7D35" />
+                        <circle cx="65" cy="30" r="8" fill="#0D577C" />
+                        <circle cx="80" cy="50" r="7" fill="#0D577C" />
+                        <circle cx="70" cy="75" r="8" fill="#0D577C" />
+                    </svg>
                  </div>
-                 <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">AuraFarm</h1>
+                 <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Aura AI</h1>
              </div>
              <button 
                 onClick={() => setIsMobileMenuOpen(true)} 
