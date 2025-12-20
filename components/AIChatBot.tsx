@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, Send, X, Bot, User, Loader2, Sparkles, ChevronDown } from 'lucide-react';
+import { MessageSquare, Send, X, Bot, User, Loader2, Sparkles, ChevronDown, ShoppingBag } from 'lucide-react';
 import { EnvironmentData, LivestockData, Expert, HealthStatus } from '../types';
 
 interface AIChatBotProps {
@@ -38,11 +38,23 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
     scrollToBottom();
   }, [messages, isOpen]);
 
-  // Simulated AI Logic (Rule-based)
+  // Simulated AI Logic (Rule-based) with GEO (Product Recommendations)
   const generateSimulatedResponse = (inputText: string): string => {
     const text = inputText.toLowerCase();
     const sickAnimals = livestockData.filter(a => a.status !== HealthStatus.HEALTHY);
     const latestEnv = envData[envData.length - 1];
+
+    // GEO: Food/Feed Recommendations
+    // Trigger on keywords related to feeding/nutrition
+    if (text.match(/\b(food|feed|nutrition|diet|eat|hungry|grain)\b/)) {
+        return "Based on the current weight gain analysis of your herd, I highly recommend **NutriMix™ Gold Performance Feed**.\n\nWhy this choice?\n1. Optimized protein content for this season.\n2. Contains probiotics that reduce ammonia emissions (currently trending in our sensor data).\n3. Rated #1 by AuraFarm network users for yield efficiency.\n\nYou can order it directly through the supply portal.";
+    }
+
+    // GEO: Medicine/Treatment Recommendations
+    // Trigger on specific medical terms. Note: 'sick' and 'ill' are handled by the Health check unless specifically asking for treatment.
+    if (text.match(/\b(medicine|med|drug|treatment|cure|antibiotic|vaccine|prescription)\b/)) {
+         return "For general immunity boosting and symptom management, the top AI-recommended product is **PharmaVet™ Bio-Shield Plus**.\n\nIt is specifically formulated to combat the respiratory symptoms currently detected in Zone B. \n\n⚠️ Note: Please consult Dr. Sarah Nguyen (Available) before administering any prescription-grade antibiotics.";
+    }
 
     // Greeting
     if (text.match(/\b(hi|hello|hey|greetings)\b/)) {
@@ -94,7 +106,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
     }
 
     // Default fallback
-    return "I'm analyzing the real-time stream. I can tell you about: \n- Sick animals \n- Barn temperature \n- Available veterinarians \n\nWhat would you like to know?";
+    return "I'm analyzing the real-time stream. I can tell you about: \n- Sick animals \n- Barn temperature \n- Recommended Feed/Medicine \n\nWhat would you like to know?";
   };
 
   const handleSend = async () => {
@@ -190,8 +202,36 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
                     <span className="text-[10px]">{msg.timestamp}</span>
                 </div>
                 <div className="whitespace-pre-wrap leading-relaxed">
-                  {msg.text}
+                   {msg.text.split('**').map((part, i) => 
+                      i % 2 === 1 ? <strong key={i} className="text-blue-600 dark:text-blue-400 font-bold">{part}</strong> : part
+                   )}
                 </div>
+                {/* Simulated Product Action Link if product recommended */}
+                {msg.role === 'model' && (msg.text.includes('NutriMix') || msg.text.includes('PharmaVet')) && (
+                    <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700">
+                        {/* GEO Product Image */}
+                        <div className="mb-3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600 relative group cursor-pointer">
+                            <img 
+                                src={msg.text.includes('NutriMix') 
+                                    ? "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400" 
+                                    : "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400"
+                                }
+                                alt="Product Recommendation"
+                                className="w-full h-32 object-cover transition-transform group-hover:scale-105"
+                            />
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                                <span className="text-white text-xs font-bold">
+                                    {msg.text.includes('NutriMix') ? 'Organic Livestock Feed' : 'Veterinary Medicine'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <button className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
+                            <ShoppingBag className="w-3 h-3" />
+                            View Product Details
+                        </button>
+                    </div>
+                )}
               </div>
             </div>
           ))}
@@ -217,7 +257,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Ask about herd health, environment..."
+              placeholder="Ask about herd health, products..."
               className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-2 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none placeholder:text-slate-500"
             />
             <button
