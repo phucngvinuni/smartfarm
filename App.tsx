@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Activity, 
@@ -8,7 +7,8 @@ import {
   Users, 
   AlertOctagon,
   Cpu,
-  Menu
+  Menu,
+  Leaf
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import StatCard from './components/StatCard';
@@ -26,6 +26,8 @@ import DevicesView from './components/DevicesView';
 import LoginView from './components/LoginView';
 import ExpertConsultView from './components/ExpertConsultView';
 import ChatWindow from './components/ChatWindow';
+import SettingsView from './components/SettingsView';
+import AIChatBot from './components/AIChatBot';
 import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices, mockExperts, mockConsultations } from './services/mockData';
 import { EnvironmentData, LivestockData, Device, Expert, Consultation } from './types';
 
@@ -37,6 +39,9 @@ function App() {
   // Mobile Menu State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Theme State
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
   // Chat State
   const [activeChatExpert, setActiveChatExpert] = useState<Expert | null>(null);
 
@@ -47,6 +52,19 @@ function App() {
   const [expertData, setExpertData] = useState<Expert[]>([]);
   const [consultationData, setConsultationData] = useState<Consultation[]>([]);
   const [activeTab, setActiveTab] = useState('Overview');
+
+  // Handle Theme Change
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => {
     // Initial data load
@@ -101,7 +119,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30 relative">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#05090d] text-slate-900 dark:text-slate-200 font-sans selection:bg-[#0B7D35]/30 relative transition-colors duration-300">
       <Sidebar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
@@ -113,16 +131,16 @@ function App() {
       
       <main className="md:ml-64 p-4 md:p-8 transition-all duration-300 ease-in-out">
         {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-800 backdrop-blur-md">
+        <div className="md:hidden flex items-center justify-between mb-6 bg-white/80 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 backdrop-blur-md shadow-sm">
              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <Activity className="w-5 h-5 text-white" />
+                 <div className="w-8 h-8 bg-gradient-to-r from-[#0B7D35] to-[#0D577C] rounded-lg flex items-center justify-center">
+                    <Leaf className="w-5 h-5 text-white" />
                  </div>
-                 <h1 className="text-xl font-bold text-white tracking-tight">SmartFarm</h1>
+                 <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">AuraFarm</h1>
              </div>
              <button 
                 onClick={() => setIsMobileMenuOpen(true)} 
-                className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200 transition-colors"
+                className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-200 transition-colors"
              >
                  <Menu className="w-6 h-6" />
              </button>
@@ -131,22 +149,24 @@ function App() {
         {/* Header Section */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{activeTab}</h2>
-            <p className="text-slate-400 flex items-center gap-2 text-xs md:text-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span>
-              System operating normally • Last updated: Just now
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{activeTab}</h2>
+            <p className="text-slate-500 dark:text-slate-400 flex items-center gap-2 text-xs md:text-sm">
+              <span className="w-2 h-2 rounded-full bg-[#0B7D35] animate-pulse shadow-[0_0_10px_rgba(11,125,53,0.5)]"></span>
+              Aura Systems Operational • Last updated: Just now
             </p>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
-             <button className="flex-1 md:flex-none bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg border border-slate-700 font-medium text-sm transition-all hover:shadow-lg active:scale-95 text-center">
-                Export Report
-             </button>
-             {userRole === 'Admin' && (
-                <button className="flex-1 md:flex-none bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-lg shadow-blue-500/20 transition-all hover:shadow-blue-500/40 active:scale-95 flex items-center justify-center gap-2">
-                    <span>+</span> Add IoT Device
-                </button>
-             )}
-          </div>
+          {activeTab !== 'Settings' && (
+            <div className="flex gap-3 w-full md:w-auto">
+               <button className="flex-1 md:flex-none bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 font-medium text-sm transition-all hover:shadow-lg active:scale-95 text-center">
+                  Export Report
+               </button>
+               {userRole === 'Admin' && (
+                  <button className="flex-1 md:flex-none bg-gradient-to-r from-[#0B7D35] to-[#0D577C] hover:opacity-90 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-lg shadow-[#0E6565]/20 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                      <span>+</span> Add IoT Device
+                  </button>
+               )}
+            </div>
+          )}
         </div>
 
         {/* Dynamic Content Rendering */}
@@ -160,7 +180,7 @@ function App() {
                   value="1,248" 
                   unit="heads"
                   icon={Users}
-                  color="text-blue-500"
+                  color="text-[#0D577C]"
                   trend="+12"
                   trendUp={true}
                 />
@@ -169,7 +189,7 @@ function App() {
                   value="98.2" 
                   unit="%"
                   icon={Activity}
-                  color="text-emerald-500"
+                  color="text-[#0B7D35]"
                   trend="+0.5%"
                   trendUp={true}
                 />
@@ -187,7 +207,7 @@ function App() {
                   value="452" 
                   unit="/ 455"
                   icon={Cpu}
-                  color="text-purple-500"
+                  color="text-[#0E6565]"
                 />
               </div>
 
@@ -211,45 +231,45 @@ function App() {
                   </div>
                   
                   <div className="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg hover:border-slate-600 transition-all group cursor-pointer">
+                      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm dark:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group cursor-pointer">
                           <div className="flex justify-between items-start mb-4">
-                              <h4 className="text-slate-400 font-medium flex items-center gap-2">
-                                  <Thermometer className="w-4 h-4 text-emerald-500" />
+                              <h4 className="text-slate-600 dark:text-slate-400 font-medium flex items-center gap-2">
+                                  <Thermometer className="w-4 h-4 text-[#0B7D35]" />
                                   Avg Herd Temperature
                               </h4>
-                              <span className="text-xs font-bold bg-emerald-500/10 text-emerald-500 px-2 py-1 rounded">Stable</span>
+                              <span className="text-xs font-bold bg-[#0B7D35]/10 text-[#0B7D35] px-2 py-1 rounded">Stable</span>
                           </div>
                           <div className="flex items-end gap-2 mb-3">
-                               <span className="text-4xl font-bold text-white group-hover:scale-105 transition-transform origin-left">38.5</span>
-                               <span className="text-slate-400 mb-1">°C</span>
+                               <span className="text-4xl font-bold text-slate-800 dark:text-white group-hover:scale-105 transition-transform origin-left">38.5</span>
+                               <span className="text-slate-500 dark:text-slate-400 mb-1">°C</span>
                           </div>
-                          <div className="w-full bg-slate-700/50 h-2 rounded-full overflow-hidden mb-2">
-                              <div className="bg-gradient-to-r from-emerald-600 to-emerald-400 h-full w-[70%] rounded-full"></div>
+                          <div className="w-full bg-slate-200 dark:bg-slate-700/50 h-2 rounded-full overflow-hidden mb-2">
+                              <div className="bg-gradient-to-r from-[#0E6565] to-[#0B7D35] h-full w-[70%] rounded-full"></div>
                           </div>
                           <p className="text-xs text-slate-500">Within safe range (38.0 - 39.0°C)</p>
                       </div>
 
-                      <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg hover:border-slate-600 transition-all group cursor-pointer">
+                      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm dark:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group cursor-pointer">
                           <div className="flex justify-between items-start mb-4">
-                              <h4 className="text-slate-400 font-medium flex items-center gap-2">
-                                  <Droplets className="w-4 h-4 text-blue-500" />
+                              <h4 className="text-slate-600 dark:text-slate-400 font-medium flex items-center gap-2">
+                                  <Droplets className="w-4 h-4 text-[#0D577C]" />
                                   Water Consumption Today
                               </h4>
-                              <span className="text-xs font-bold bg-blue-500/10 text-blue-500 px-2 py-1 rounded">Slight Increase</span>
+                              <span className="text-xs font-bold bg-[#0D577C]/10 text-[#0D577C] px-2 py-1 rounded">Slight Increase</span>
                           </div>
                           <div className="flex items-end gap-2 mb-3">
-                               <span className="text-4xl font-bold text-blue-400 group-hover:scale-105 transition-transform origin-left">4,200</span>
-                               <span className="text-slate-400 mb-1">liters</span>
+                               <span className="text-4xl font-bold text-[#0D577C] group-hover:scale-105 transition-transform origin-left">4,200</span>
+                               <span className="text-slate-500 dark:text-slate-400 mb-1">liters</span>
                           </div>
-                          <div className="w-full bg-slate-700/50 h-2 rounded-full overflow-hidden mb-2">
-                              <div className="bg-gradient-to-r from-blue-600 to-blue-400 h-full w-[85%] rounded-full"></div>
+                          <div className="w-full bg-slate-200 dark:bg-slate-700/50 h-2 rounded-full overflow-hidden mb-2">
+                              <div className="bg-gradient-to-r from-[#0D577C] to-blue-400 h-full w-[85%] rounded-full"></div>
                           </div>
                            <p className="text-xs text-slate-500">+5% vs weekly average</p>
                       </div>
 
-                      <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg hover:border-slate-600 transition-all group cursor-pointer">
+                      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm dark:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group cursor-pointer">
                           <div className="flex justify-between items-start mb-4">
-                              <h4 className="text-slate-400 font-medium flex items-center gap-2">
+                              <h4 className="text-slate-600 dark:text-slate-400 font-medium flex items-center gap-2">
                                   <Wind className="w-4 h-4 text-yellow-500" />
                                   Air Quality (NH3)
                               </h4>
@@ -257,21 +277,21 @@ function App() {
                           </div>
                           <div className="flex items-end gap-2 mb-3">
                                <span className="text-4xl font-bold text-yellow-500 group-hover:scale-105 transition-transform origin-left">22</span>
-                               <span className="text-slate-400 mb-1">ppm</span>
+                               <span className="text-slate-500 dark:text-slate-400 mb-1">ppm</span>
                           </div>
-                          <div className="w-full bg-slate-700/50 h-2 rounded-full overflow-hidden mb-2">
+                          <div className="w-full bg-slate-200 dark:bg-slate-700/50 h-2 rounded-full overflow-hidden mb-2">
                               <div className="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full w-[45%] rounded-full"></div>
                           </div>
                           <p className="text-xs text-slate-500">Check ventilation in Zone C</p>
                       </div>
                        
-                       <div className="group bg-gradient-to-br from-indigo-600 to-violet-700 rounded-xl p-5 shadow-lg flex flex-col justify-center items-center text-center cursor-pointer hover:shadow-indigo-500/20 hover:scale-[1.02] transition-all relative overflow-hidden">
+                       <div className="group bg-gradient-to-br from-[#0E6565] to-[#0D577C] rounded-xl p-5 shadow-lg flex flex-col justify-center items-center text-center cursor-pointer hover:shadow-[#0E6565]/20 hover:scale-[1.02] transition-all relative overflow-hidden">
                           <div className="absolute top-0 left-0 w-full h-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                           <div className="p-3 bg-white/10 rounded-full mb-3 group-hover:bg-white/20 transition-colors">
                             <Cpu className="w-8 h-8 text-white" />
                           </div>
                           <h4 className="text-white font-bold text-lg">Blockchain Sync</h4>
-                          <p className="text-indigo-200 text-sm mt-1 mb-4">100% Traceability Data Synced</p>
+                          <p className="text-slate-200 text-sm mt-1 mb-4">100% Traceability Data Synced</p>
                           <button className="bg-white/10 hover:bg-white/25 text-white text-xs font-semibold px-4 py-2 rounded-lg border border-white/20 transition-all w-full">
                               View Smart Contract
                           </button>
@@ -320,6 +340,14 @@ function App() {
           {activeTab === 'Reports' && (
             <ReportsView />
           )}
+
+          {activeTab === 'Settings' && (
+            <SettingsView 
+                isDarkMode={theme === 'dark'} 
+                toggleTheme={toggleTheme} 
+                userRole={userRole}
+            />
+          )}
         </div>
       </main>
 
@@ -330,6 +358,13 @@ function App() {
             onClose={() => setActiveChatExpert(null)} 
         />
       )}
+      
+      {/* AI Assistant Chatbot - Connected to Main App State */}
+      <AIChatBot 
+         envData={envData}
+         livestockData={livestockData}
+         experts={expertData}
+      />
     </div>
   );
 }

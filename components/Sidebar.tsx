@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   LayoutDashboard, 
@@ -14,7 +13,8 @@ import {
   ChevronRight,
   Cpu,
   Stethoscope,
-  X
+  X,
+  Leaf
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -56,17 +56,17 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
       )}
 
       <div className={`
-        w-64 bg-slate-900 border-r border-slate-800 h-screen flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 shadow-2xl
+        w-64 bg-slate-50 dark:bg-[#0a1018] border-r border-slate-200 dark:border-slate-800 h-screen flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 shadow-2xl
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
       `}>
-        <div className="p-6 flex items-center justify-between border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+        <div className="p-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/50 bg-slate-50 dark:bg-[#0a1018]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <Activity className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 bg-gradient-to-br from-[#0B7D35] to-[#0D577C] rounded-xl flex items-center justify-center shadow-lg shadow-[#0E6565]/20">
+                <Leaf className="w-6 h-6 text-white" />
             </div>
             <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-white tracking-tight leading-none">SmartFarm</h1>
-                <span className="text-xs font-semibold text-blue-400 tracking-wider">AI MONITOR</span>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">AuraFarm</h1>
+                <span className="text-[10px] font-bold text-[#0E6565] tracking-widest mt-1">INTELLIGENCE</span>
             </div>
           </div>
           <button onClick={onClose} className="md:hidden text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
@@ -75,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
         </div>
 
         <div className="flex-1 py-6 px-3 overflow-y-auto custom-scrollbar">
-          <p className="px-3 text-[11px] font-bold text-slate-500 uppercase mb-3 tracking-widest">Main Menu</p>
+          <p className="px-3 text-[11px] font-bold text-[#0D577C] uppercase mb-3 tracking-widest">Main Menu</p>
           <nav className="space-y-1">
             {navItems.map((item) => {
               const isActive = activeTab === item.label;
@@ -85,12 +85,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
                   onClick={() => handleNavClick(item.label)}
                   className={`w-full group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive 
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                      ? 'bg-gradient-to-r from-[#0B7D35] to-[#0D577C] text-white shadow-lg shadow-[#0B7D35]/20' 
+                      : 'text-slate-500 dark:text-slate-400 hover:bg-[#0E6565]/10 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                      <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                      <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`} />
                       {item.label}
                   </div>
                   {isActive && <ChevronRight className="w-4 h-4 opacity-50" />}
@@ -99,32 +99,46 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
             })}
           </nav>
 
-          <div className="my-6 border-t border-slate-800 mx-3"></div>
+          <div className="my-6 border-t border-slate-200 dark:border-slate-800 mx-3"></div>
 
-          <p className="px-3 text-[11px] font-bold text-slate-500 uppercase mb-3 tracking-widest">System</p>
+          <p className="px-3 text-[11px] font-bold text-[#0D577C] uppercase mb-3 tracking-widest">System</p>
           <nav className="space-y-1">
-              <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
-                  <Settings className="w-5 h-5 text-slate-500" />
+              <button 
+                  onClick={() => handleNavClick('Settings')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    activeTab === 'Settings' 
+                        ? 'bg-gradient-to-r from-[#0B7D35] to-[#0D577C] text-white shadow-lg' 
+                        : 'text-slate-500 dark:text-slate-400 hover:bg-[#0E6565]/10 hover:text-slate-900 dark:hover:text-slate-200'
+                  }`}
+              >
+                  <Settings className={`w-5 h-5 transition-colors ${activeTab === 'Settings' ? 'text-white' : 'text-slate-400 dark:text-slate-500'}`} />
                   Settings
               </button>
               <button 
                   onClick={onLogout}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-rose-500 dark:hover:text-rose-400 dark:hover:bg-rose-500/10 transition-colors"
               >
-                  <LogOut className="w-5 h-5 text-slate-500" />
+                  <LogOut className="w-5 h-5 text-slate-400 dark:text-slate-500" />
                   Logout
               </button>
           </nav>
         </div>
 
-        <div className="p-4 border-t border-slate-800 bg-slate-900/50">
-          <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer">
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#05090d]">
+          <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer">
               <div className="relative">
-                  <img src={userRole === 'Admin' ? "https://picsum.photos/40?grayscale" : "https://images.unsplash.com/photo-1542384701-c0e46e0604a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"} alt="User" className="w-9 h-9 rounded-full border border-slate-600 object-cover" />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+                  <img 
+                    src={userRole === 'Admin' 
+                      ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                      : "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                    } 
+                    alt="User" 
+                    className="w-9 h-9 rounded-full border border-slate-300 dark:border-slate-600 object-cover" 
+                  />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#0B7D35] border-2 border-slate-100 dark:border-slate-900 rounded-full"></span>
               </div>
               <div>
-                  <p className="text-sm font-medium text-white">{userRole === 'Admin' ? 'System Admin' : 'John Farmer'}</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">{userRole === 'Admin' ? 'System Admin' : 'John Farmer'}</p>
                   <p className="text-xs text-slate-500">{userRole}</p>
               </div>
           </div>
