@@ -29,8 +29,8 @@ import SettingsView from './components/SettingsView';
 import AIChatBot from './components/AIChatBot';
 import LandingPage from './components/LandingPage';
 import AutomationView from './components/AutomationView';
-import ProfitPredictorView from './components/ProfitPredictorView'; // Imported
-import HealthPassportView from './components/HealthPassportView'; // Imported
+import ProfitPredictorView from './components/ProfitPredictorView'; 
+import HealthPassportView from './components/HealthPassportView'; 
 import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices, mockExperts, mockConsultations } from './services/mockData';
 import { EnvironmentData, LivestockData, Device, Expert, Consultation } from './types';
 

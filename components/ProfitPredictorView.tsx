@@ -1,14 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { 
     TrendingUp, 
-    DollarSign, 
-    Scale, 
-    Calendar, 
-    ArrowRight, 
     PiggyBank, 
     Calculator,
     Info,
-    AlertCircle
+    Scale
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area, ReferenceLine } from 'recharts';
 
@@ -65,17 +61,30 @@ const ProfitPredictorView: React.FC = () => {
             }
         });
         
-        if (maxIndex !== -1) {
+        if (maxIndex !== -1 && data[maxIndex]) {
             data[maxIndex].isOptimal = true;
         }
 
         return { data, maxIndex, maxProfit };
     }, [marketPrice, feedCost, currentWeight, growthRate, feedConversion]);
 
+    // Safety Check: Ensure data exists before rendering
+    if (!forecastData || !forecastData.data || forecastData.data.length === 0 || forecastData.maxIndex === -1) {
+        return (
+            <div className="flex items-center justify-center h-64 text-slate-400">
+                <span className="animate-pulse">Analyzing market data...</span>
+            </div>
+        );
+    }
+
     const optimalPoint = forecastData.data[forecastData.maxIndex];
+    // Double check optimalPoint
+    if (!optimalPoint) {
+        return null;
+    }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-white flex items-center gap-2">
