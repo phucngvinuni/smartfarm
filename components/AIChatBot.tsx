@@ -7,8 +7,8 @@ import { EnvironmentData, LivestockData, Expert, HealthStatus } from '../types';
 // 1. Place image files in the 'public' folder (e.g., public/feed.jpg) and use "/feed.jpg"
 // 2. Or replace these URLs with your own hosted image links
 const PRODUCT_IMAGES = {
-  NUTRIMIX: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400",
-  PHARMAVET: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400"
+  NUTRIMIX: "/foods.jpg",
+  PHARMAVET: "/medicine.jpg"
 };
 
 interface AIChatBotProps {
