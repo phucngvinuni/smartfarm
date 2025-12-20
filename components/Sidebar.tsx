@@ -14,7 +14,10 @@ import {
   Cpu,
   Stethoscope,
   X,
-  Info
+  Info,
+  Zap,
+  TrendingUp,
+  QrCode
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -33,12 +36,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
     { icon: Activity, label: 'Livestock Health' },
     { icon: Thermometer, label: 'Environment' },
     { icon: Cpu, label: 'Devices' },
+    { icon: Zap, label: 'Automation' },
     { icon: Camera, label: 'AI Monitoring' },
+    { icon: TrendingUp, label: 'Profit Predictor' }, // New Feature
+    { icon: QrCode, label: 'Health Passport' }, // New Feature
     { icon: Stethoscope, label: 'Expert Consult' },
     { icon: BrainCircuit, label: 'Disease Forecast' },
     { icon: Database, label: 'Traceability' },
     { icon: FileText, label: 'Reports' },
-    { icon: Info, label: 'About Us' }, // Added About Us
+    { icon: Info, label: 'About Us' },
   ];
 
   const handleNavClick = (label: string) => {

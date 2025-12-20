@@ -27,7 +27,10 @@ import ExpertConsultView from './components/ExpertConsultView';
 import ChatWindow from './components/ChatWindow';
 import SettingsView from './components/SettingsView';
 import AIChatBot from './components/AIChatBot';
-import LandingPage from './components/LandingPage'; // Import LandingPage
+import LandingPage from './components/LandingPage';
+import AutomationView from './components/AutomationView';
+import ProfitPredictorView from './components/ProfitPredictorView'; // Imported
+import HealthPassportView from './components/HealthPassportView'; // Imported
 import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices, mockExperts, mockConsultations } from './services/mockData';
 import { EnvironmentData, LivestockData, Device, Expert, Consultation } from './types';
 
@@ -192,7 +195,7 @@ function App() {
               Aura Systems Operational • Last updated: Just now
             </p>
           </div>
-          {activeTab !== 'Settings' && (
+          {activeTab !== 'Settings' && activeTab !== 'Automation' && activeTab !== 'Profit Predictor' && activeTab !== 'Health Passport' && (
             <div className="flex gap-3 w-full md:w-auto">
                <button className="flex-1 md:flex-none bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 font-medium text-sm transition-all hover:shadow-lg active:scale-95 text-center">
                   Export Report
@@ -352,6 +355,18 @@ function App() {
 
           {activeTab === 'Devices' && (
             <DevicesView devices={deviceData} />
+          )}
+
+          {activeTab === 'Automation' && (
+            <AutomationView />
+          )}
+
+           {activeTab === 'Profit Predictor' && (
+            <ProfitPredictorView />
+          )}
+
+           {activeTab === 'Health Passport' && (
+            <HealthPassportView />
           )}
 
           {activeTab === 'AI Monitoring' && (
