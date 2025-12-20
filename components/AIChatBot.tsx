@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
 import { MessageSquare, Send, X, Bot, User, Loader2, Sparkles, ChevronDown } from 'lucide-react';
 import { EnvironmentData, LivestockData, Expert, HealthStatus } from '../types';
 
@@ -39,37 +38,63 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
     scrollToBottom();
   }, [messages, isOpen]);
 
-  const generateSystemContext = () => {
+  // Simulated AI Logic (Rule-based)
+  const generateSimulatedResponse = (inputText: string): string => {
+    const text = inputText.toLowerCase();
     const sickAnimals = livestockData.filter(a => a.status !== HealthStatus.HEALTHY);
     const latestEnv = envData[envData.length - 1];
 
-    return `You are Aura, an advanced AI assistant for a smart livestock farm.
-    
-    CURRENT FARM STATUS (Real-time Data):
-    
-    1. ENVIRONMENT (Latest Reading):
-       - Temperature: ${latestEnv?.temperature.toFixed(1)}°C
-       - Humidity: ${latestEnv?.humidity.toFixed(0)}%
-       - CO2: ${latestEnv?.co2.toFixed(0)} ppm
-       - NH3: ${latestEnv?.nh3.toFixed(0)} ppm
-    
-    2. LIVESTOCK OVERVIEW:
-       - Total Animals: ${livestockData.length}
-       - Critical/Warning Status: ${sickAnimals.length} animals
-       
-    3. SICK ANIMAL DETAILS (Prioritize these):
-       ${sickAnimals.map(a => `- ID ${a.tagId} (${a.type}): ${a.status} status, Temp ${a.temperature.toFixed(1)}°C`).join('\n       ')}
-    
-    4. AVAILABLE EXPERTS:
-       ${experts.map(e => `- ${e.name} (${e.role}): Specializes in ${e.specialization}`).join('\n       ')}
+    // Greeting
+    if (text.match(/\b(hi|hello|hey|greetings)\b/)) {
+      return "Hello! I am monitoring " + livestockData.length + " animals and " + envData.length + " sensors. Ask me about 'sick animals', 'temperature', or 'experts'.";
+    }
 
-    INSTRUCTIONS:
-    - Answer questions concisely based on the data above.
-    - If a user asks about sick animals, list them and their specific symptoms/vitals from the data.
-    - If a health issue is detected, ALWAYS suggest contacting a specific expert from the list based on their specialization (e.g., Dr. Sarah for general/large animals, Dr. Michael for biosecurity/epidemiology).
-    - If asked about the environment, analyze if the levels (CO2, NH3, Temp) are safe.
-    - Keep tone professional but helpful.
-    `;
+    // Health / Sick Animals
+    if (text.includes('sick') || text.includes('health') || text.includes('ill') || text.includes('warning') || text.includes('critical')) {
+        if (sickAnimals.length === 0) {
+            return "Good news! All livestock are currently healthy based on the latest sensor readings.";
+        }
+        const summary = sickAnimals.map(a => 
+            `- ${a.type} #${a.tagId}: ${a.status} (Temp: ${a.temperature.toFixed(1)}°C, HR: ${a.heartRate})`
+        ).join('\n');
+        
+        return `⚠️ I found ${sickAnimals.length} animals requiring attention:\n\n${summary}\n\nI recommend isolating these animals immediately.`;
+    }
+
+    // Environment / Temperature
+    if (text.includes('env') || text.includes('temp') || text.includes('humid') || text.includes('air') || text.includes('co2')) {
+        if (!latestEnv) return "I'm waiting for the latest environmental sensor update...";
+        
+        let status = "✅ Optimal";
+        if (latestEnv.temperature > 30 || latestEnv.nh3 > 20) status = "⚠️ Warning";
+
+        return `Current Barn Conditions (${status}):\n` +
+               `- Temperature: ${latestEnv.temperature.toFixed(1)}°C\n` +
+               `- Humidity: ${latestEnv.humidity.toFixed(0)}%\n` +
+               `- CO2: ${latestEnv.co2.toFixed(0)} ppm\n` +
+               `- NH3: ${latestEnv.nh3.toFixed(1)} ppm` +
+               (latestEnv.nh3 > 25 ? "\n\nAlert: Ammonia levels are high. Please check ventilation in Zone C." : "");
+    }
+
+    // Experts
+    if (text.includes('expert') || text.includes('vet') || text.includes('doctor') || text.includes('contact')) {
+        const onlineExperts = experts.filter(e => e.status === 'Online');
+        if (onlineExperts.length > 0) {
+            return `I recommend contacting the following online experts:\n` +
+                   onlineExperts.map(e => `- ${e.name} (${e.role})`).join('\n');
+        }
+        return "No experts are currently online, but you can leave a message for Dr. Sarah Nguyen (Veterinarian).";
+    }
+
+    // Pigs specific
+    if (text.includes('pig')) {
+        const pigs = livestockData.filter(a => a.type === 'Pig');
+        const sickPigs = pigs.filter(a => a.status !== HealthStatus.HEALTHY);
+        return `We have ${pigs.length} pigs in total. ${sickPigs.length} are showing abnormal signs.`;
+    }
+
+    // Default fallback
+    return "I'm analyzing the real-time stream. I can tell you about: \n- Sick animals \n- Barn temperature \n- Available veterinarians \n\nWhat would you like to know?";
   };
 
   const handleSend = async () => {
@@ -86,52 +111,30 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
     setInput('');
     setIsLoading(true);
 
-    try {
-      // Initialize the client
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
-      // Prepare history for the API (last 10 messages to keep context window manageable)
-      // We don't send the system instruction in the history array for this specific call structure, 
-      // instead we inject it into the generateContent config.
-      const chatHistory = messages.slice(-10).map(m => ({
-        role: m.role,
-        parts: [{ text: m.text }]
-      }));
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        contents: [
-            ...chatHistory,
-            { role: 'user', parts: [{ text: userMessage.text }] }
-        ],
-        config: {
-          systemInstruction: generateSystemContext(),
-        },
-      });
-
-      const aiText = response.text || "I'm having trouble analyzing the farm data right now. Please try again.";
-
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'model',
-        text: aiText,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      setMessages(prev => [...prev, botMessage]);
-
-    } catch (error) {
-      console.error("Gemini API Error:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'model',
-        text: "I encountered an error connecting to the AuraFarm intelligence core. Please check your connection.",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+    // Simulate network delay for realism
+    setTimeout(() => {
+      try {
+        const responseText = generateSimulatedResponse(userMessage.text);
+        
+        const botMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'model',
+            text: responseText,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, botMessage]);
+      } catch (error) {
+        const errorMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'model',
+            text: "System Alert: Connection to AI core interrupted.",
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 1000 + Math.random() * 1000); // Random delay 1-2s
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
