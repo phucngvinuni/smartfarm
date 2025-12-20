@@ -45,8 +45,8 @@ const ProfitPredictorView: React.FC = () => {
             data.push({
                 day: `Day ${i}`,
                 date: date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
-                weight: weight.toFixed(1),
-                profit: profit,
+                weight: Number(weight.toFixed(1)), // FIX: Ensure this is a Number, not a String
+                profit: Math.round(profit), // Clean up decimals
                 isOptimal: false
             });
         }
@@ -242,6 +242,7 @@ const ProfitPredictorView: React.FC = () => {
                                         tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`} 
                                         axisLine={false} 
                                         tickLine={false}
+                                        domain={['auto', 'auto']}
                                     />
                                     <YAxis 
                                         yAxisId="right" 
@@ -251,6 +252,7 @@ const ProfitPredictorView: React.FC = () => {
                                         unit="kg" 
                                         axisLine={false} 
                                         tickLine={false}
+                                        domain={['auto', 'auto']}
                                     />
                                     <Tooltip 
                                         contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px' }}
