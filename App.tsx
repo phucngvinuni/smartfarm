@@ -132,11 +132,11 @@ function App() {
         {/* Mobile Header */}
         <div className="md:hidden flex items-center justify-between mb-6 bg-white/80 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 backdrop-blur-md shadow-sm">
              <div className="flex items-center gap-3">
-                 <div className="w-8 h-8 flex items-center justify-center">
+                 <div className="w-8 h-8 flex items-center justify-center shrink-0">
                     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                        <path d="M35 55 L65 30" stroke="currentColor" strokeWidth="4" className="text-slate-400 dark:text-slate-600" />
-                        <path d="M35 55 L80 50" stroke="currentColor" strokeWidth="4" className="text-slate-400 dark:text-slate-600" />
-                        <path d="M35 55 L70 75" stroke="currentColor" strokeWidth="4" className="text-slate-400 dark:text-slate-600" />
+                        <path d="M35 55 L65 30" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-slate-400 dark:text-slate-600" />
+                        <path d="M35 55 L80 50" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-slate-400 dark:text-slate-600" />
+                        <path d="M35 55 L70 75" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-slate-400 dark:text-slate-600" />
                         
                         <circle cx="35" cy="55" r="14" fill="#0B7D35" />
                         <circle cx="65" cy="30" r="8" fill="#0D577C" />

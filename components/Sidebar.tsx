@@ -60,13 +60,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
       `}>
         <div className="p-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/50 bg-slate-50 dark:bg-[#0a1018]">
           <div className="flex items-center gap-3">
-            {/* Custom Aura AI Logo */}
-            <div className="w-10 h-10 flex items-center justify-center">
+            {/* Custom Aura AI Logo - Refined */}
+            <div className="w-10 h-10 flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                    {/* Connections */}
-                    <path d="M35 55 L65 30" stroke="currentColor" strokeWidth="3" className="text-slate-400 dark:text-slate-600" />
-                    <path d="M35 55 L80 50" stroke="currentColor" strokeWidth="3" className="text-slate-400 dark:text-slate-600" />
-                    <path d="M35 55 L70 75" stroke="currentColor" strokeWidth="3" className="text-slate-400 dark:text-slate-600" />
+                    {/* Connections with rounded caps and thicker strokes */}
+                    <path d="M35 55 L65 30" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-slate-400 dark:text-slate-600" />
+                    <path d="M35 55 L80 50" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-slate-400 dark:text-slate-600" />
+                    <path d="M35 55 L70 75" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-slate-400 dark:text-slate-600" />
                     
                     {/* Nodes */}
                     <circle cx="35" cy="55" r="14" fill="url(#grad-main)" />
@@ -82,10 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
                     </defs>
                 </svg>
             </div>
-            <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">Aura AI</h1>
-                <span className="text-[10px] font-bold text-[#0E6565] tracking-widest mt-1">INTELLIGENCE</span>
-            </div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Aura AI</h1>
           </div>
           <button onClick={onClose} className="md:hidden text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
             <X className="w-6 h-6" />

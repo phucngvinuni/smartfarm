@@ -12,30 +12,30 @@ const AIMonitoringView: React.FC = () => {
             <AICameraFeed />
         </div>
         
-        {/* CAM-01 (Zone B - Chickens) - Fixed View */}
+        {/* CAM-01 (Zone C - Pigs) - Fixed View */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
-            <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                CAM-01 (Zone B - Chickens)
+            <div className="absolute top-2 left-2 bg-black/40 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-white flex items-center gap-1.5 z-10">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                CAM-01 (Zone C - Pigs)
             </div>
             <iframe
-                src="https://player.cloudinary.com/embed/?cloud_name=ddm2hzdhy&public_id=Tracker_Distance_Measure_2_fdmpw8&autoplay=true&autoplay_mode=on-scroll&muted=true&loop=true&controls=false&control_bar[volumePanel]=false"
+                src="https://player.cloudinary.com/embed/?cloud_name=ddm2hzdhy&public_id=1219_1_bzdacc&autoplay=true&autoplay_mode=on-scroll&muted=true&loop=true&controls=false&control_bar[volumePanel]=false&control_bar[fullscreenToggle]=false"
                 className="w-full h-full object-cover border-0"
                 allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                 allowFullScreen
             />
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10 pointer-events-none">
-                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs border border-white/10">
-                    <div className="text-slate-400 text-[10px] uppercase">Status</div>
-                    <div className="text-emerald-400 font-bold">Tracking Active</div>
+            <div className="absolute bottom-2 left-2 right-2 flex justify-between items-end z-10 pointer-events-none">
+                <div className="bg-black/60 backdrop-blur rounded px-2 py-1 text-[10px] border border-white/10 flex items-center gap-2">
+                    <span className="text-slate-400 uppercase font-bold">Status</span>
+                    <span className="text-emerald-400 font-bold">Tracking Active</span>
                 </div>
             </div>
         </div>
 
         {/* CAM-02 (Zone A - Cows) - Fixed View */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
-             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+             <div className="absolute top-2 left-2 bg-black/40 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-white flex items-center gap-1.5 z-10">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
                 CAM-02 (Zone A - Cows)
             </div>
             <iframe
@@ -44,18 +44,18 @@ const AIMonitoringView: React.FC = () => {
                 allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                 allowFullScreen
             />
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10 pointer-events-none">
-                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs border border-white/10">
-                    <div className="text-slate-400 text-[10px] uppercase">Behavior</div>
-                    <div className="text-blue-400 font-bold">Feeding (Normal)</div>
+            <div className="absolute bottom-2 left-2 right-2 flex justify-between items-end z-10 pointer-events-none">
+                <div className="bg-black/60 backdrop-blur rounded px-2 py-1 text-[10px] border border-white/10 flex items-center gap-2">
+                    <span className="text-slate-400 uppercase font-bold">Behavior</span>
+                    <span className="text-blue-400 font-bold">Feeding (Normal)</span>
                 </div>
             </div>
         </div>
 
         {/* CAM-03 (Entry Gate) - Fixed View */}
         <div className="bg-slate-900 border border-slate-700 rounded-xl relative overflow-hidden aspect-video flex items-center justify-center group">
-             <div className="absolute top-4 left-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-xs font-mono text-white flex items-center gap-2 z-10">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+             <div className="absolute top-2 left-2 bg-black/40 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-white flex items-center gap-1.5 z-10">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
                 CAM-03 (Entry Gate)
             </div>
             <iframe
@@ -64,10 +64,10 @@ const AIMonitoringView: React.FC = () => {
                 allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                 allowFullScreen
             />
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10 pointer-events-none">
-                <div className="bg-black/60 backdrop-blur rounded p-2 text-xs border border-white/10">
-                    <div className="text-slate-400 text-[10px] uppercase">Counting</div>
-                    <div className="text-emerald-400 font-bold">Total: 42</div>
+            <div className="absolute bottom-2 left-2 right-2 flex justify-between items-end z-10 pointer-events-none">
+                <div className="bg-black/60 backdrop-blur rounded px-2 py-1 text-[10px] border border-white/10 flex items-center gap-2">
+                    <span className="text-slate-400 uppercase font-bold">Counting</span>
+                    <span className="text-emerald-400 font-bold">Total: 42</span>
                 </div>
             </div>
         </div>
@@ -120,7 +120,7 @@ const AIMonitoringView: React.FC = () => {
                     </span>
                     <span className="text-xs text-slate-500 font-mono">10:40 AM</span>
                 </div>
-                <p className="text-sm text-slate-300 font-medium mb-2">Zone B Headcount: 35 (Chickens)</p>
+                <p className="text-sm text-slate-300 font-medium mb-2">Zone C Headcount: 18 (Pigs)</p>
                 <div className="flex items-center gap-2 text-xs text-slate-500">
                     <Video className="w-3 h-3" />
                     AI Camera 01

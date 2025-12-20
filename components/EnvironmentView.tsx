@@ -140,7 +140,7 @@ const EnvironmentView: React.FC<EnvironmentViewProps> = ({ data }) => {
         </div>
       </div>
 
-      <div className="h-[500px]">
+      <div className="h-[650px]">
         <EnvironmentCharts data={data} />
       </div>
     </div>
