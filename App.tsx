@@ -27,6 +27,7 @@ import ExpertConsultView from './components/ExpertConsultView';
 import ChatWindow from './components/ChatWindow';
 import SettingsView from './components/SettingsView';
 import AIChatBot from './components/AIChatBot';
+import LandingPage from './components/LandingPage'; // Import LandingPage
 import { generateEnvironmentHistory, generateLivestockData, mockAlerts, generateDevices, mockExperts, mockConsultations } from './services/mockData';
 import { EnvironmentData, LivestockData, Device, Expert, Consultation } from './types';
 
@@ -115,6 +116,34 @@ function App() {
 
   if (!isLoggedIn) {
     return <LoginView onLogin={handleLogin} />;
+  }
+
+  // If on Landing Page, render full width
+  if (activeTab === 'About Us') {
+      return (
+          <div className="min-h-screen bg-slate-50 dark:bg-[#05090d] text-slate-900 dark:text-slate-200 font-sans selection:bg-[#0B7D35]/30 relative transition-colors duration-300">
+             <Sidebar 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab} 
+                userRole={userRole}
+                onLogout={handleLogout}
+                isMobileOpen={isMobileMenuOpen}
+                onClose={() => setIsMobileMenuOpen(false)}
+            />
+             <div className="md:ml-64 transition-all duration-300 ease-in-out">
+                 {/* Mobile Header Button overlay for landing page */}
+                 <div className="md:hidden fixed top-4 right-4 z-50">
+                    <button 
+                        onClick={() => setIsMobileMenuOpen(true)} 
+                        className="p-2 bg-slate-900/80 backdrop-blur rounded-lg text-white border border-slate-700 shadow-lg"
+                    >
+                        <Menu className="w-6 h-6" />
+                    </button>
+                 </div>
+                 <LandingPage />
+             </div>
+          </div>
+      );
   }
 
   return (

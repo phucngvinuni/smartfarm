@@ -13,7 +13,8 @@ import {
   ChevronRight,
   Cpu,
   Stethoscope,
-  X
+  X,
+  Info
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -37,6 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, userRole, on
     { icon: BrainCircuit, label: 'Disease Forecast' },
     { icon: Database, label: 'Traceability' },
     { icon: FileText, label: 'Reports' },
+    { icon: Info, label: 'About Us' }, // Added About Us
   ];
 
   const handleNavClick = (label: string) => {
