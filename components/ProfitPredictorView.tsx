@@ -21,8 +21,13 @@ const ProfitPredictorView: React.FC = () => {
         const data = [];
         const today = new Date();
         
-        let weight = currentWeight;
+        // Ensure inputs are valid numbers to prevent NaN propagation
+        let weight = isNaN(currentWeight) ? 0 : currentWeight;
         let cumulativeFeedCost = 0;
+        const safeGrowthRate = isNaN(growthRate) ? 0 : growthRate;
+        const safeFCR = isNaN(feedConversion) ? 0 : feedConversion;
+        const safeFeedCost = isNaN(feedCost) ? 0 : feedCost;
+        const safeMarketPrice = isNaN(marketPrice) ? 0 : marketPrice;
         
         // Simulate next 60 days
         for (let i = 0; i <= 60; i++) {
@@ -30,23 +35,24 @@ const ProfitPredictorView: React.FC = () => {
             date.setDate(today.getDate() + i);
             
             // Logic: Growth rate slows down as they get heavier, FCR increases
-            const adjustedGrowth = growthRate * (1 - (weight > 100 ? (weight - 100) * 0.015 : 0)); 
-            const adjustedFCR = feedConversion * (1 + (weight > 90 ? (weight - 90) * 0.02 : 0));
+            const adjustedGrowth = safeGrowthRate * (1 - (weight > 100 ? (weight - 100) * 0.015 : 0)); 
+            const adjustedFCR = safeFCR * (1 + (weight > 90 ? (weight - 90) * 0.02 : 0));
             
             const dailyFeed = adjustedGrowth * adjustedFCR;
-            const dailyCost = dailyFeed * feedCost;
+            const dailyCost = dailyFeed * safeFeedCost;
             
             weight += adjustedGrowth;
             cumulativeFeedCost += dailyCost;
             
-            const revenue = weight * marketPrice;
+            const revenue = weight * safeMarketPrice;
             const profit = revenue - (cumulativeFeedCost + 2000000); // 2M fixed cost base (piglet, vaccines, labor)
 
             data.push({
                 day: `Day ${i}`,
                 date: date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
-                weight: Number(weight.toFixed(1)), // FIX: Ensure this is a Number, not a String
-                profit: Math.round(profit), // Clean up decimals
+                // STRICT SAFETY: Recharts crashes on NaN or Infinity
+                weight: isFinite(weight) ? Number(weight.toFixed(1)) : 0, 
+                profit: isFinite(profit) ? Math.round(profit) : 0,
                 isOptimal: false
             });
         }
@@ -78,7 +84,6 @@ const ProfitPredictorView: React.FC = () => {
     }
 
     const optimalPoint = forecastData.data[forecastData.maxIndex];
-    // Double check optimalPoint
     if (!optimalPoint) {
         return null;
     }
@@ -242,7 +247,7 @@ const ProfitPredictorView: React.FC = () => {
                                         tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`} 
                                         axisLine={false} 
                                         tickLine={false}
-                                        domain={['auto', 'auto']}
+                                        // Removed explicit domain to let Recharts calculate safely
                                     />
                                     <YAxis 
                                         yAxisId="right" 
@@ -252,12 +257,12 @@ const ProfitPredictorView: React.FC = () => {
                                         unit="kg" 
                                         axisLine={false} 
                                         tickLine={false}
-                                        domain={['auto', 'auto']}
+                                        // Removed explicit domain
                                     />
                                     <Tooltip 
                                         contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px' }}
                                         formatter={(value: any, name: string) => {
-                                            if (name === 'Projected Profit') return [`${value.toLocaleString()} VND`, name];
+                                            if (name === 'Projected Profit') return [`${Number(value).toLocaleString()} VND`, name];
                                             return [`${value} kg`, name];
                                         }}
                                         labelStyle={{ color: '#e2e8f0' }}
@@ -273,6 +278,7 @@ const ProfitPredictorView: React.FC = () => {
                                         fillOpacity={1} 
                                         fill="url(#colorProfit)" 
                                         strokeWidth={3}
+                                        isAnimationActive={false} // Disable animation to prevent NaN interpolation issues
                                     />
                                     <Line 
                                         yAxisId="right"
@@ -282,6 +288,7 @@ const ProfitPredictorView: React.FC = () => {
                                         stroke="#3b82f6" 
                                         strokeWidth={2}
                                         dot={false}
+                                        isAnimationActive={false}
                                     />
                                 </AreaChart>
                             </ResponsiveContainer>
