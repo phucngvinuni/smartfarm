@@ -9,12 +9,11 @@ import {
   Database, 
   Users, 
   Handshake, 
-  ShieldCheck, 
-  ArrowRight, 
   CheckCircle2,
   Globe,
   Smartphone,
-  ChevronRight
+  ChevronRight,
+  ArrowRight
 } from 'lucide-react';
 
 const LandingPage: React.FC = () => {
@@ -22,7 +21,7 @@ const LandingPage: React.FC = () => {
     <div className="min-h-screen bg-[#05090d] text-slate-200 overflow-x-hidden font-sans selection:bg-emerald-500/30">
       
       {/* 1. HERO SECTION */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Navbar for Landing Page */}
         <div className="absolute top-0 left-0 right-0 p-6 md:p-8 z-50 flex justify-between items-center max-w-7xl mx-auto w-full">
             <div className="flex items-center gap-3">
@@ -49,15 +48,16 @@ const LandingPage: React.FC = () => {
 
         {/* Background with Gradient Overlay */}
         <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#05090d]/60 to-[#05090d] z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-[#05090d]/50 to-[#05090d] z-10"></div>
+            {/* New Hero Image: Drone/AgTech */}
             <img 
-                src="https://images.unsplash.com/photo-1625246333195-581972379a5b?q=80&w=2000&auto=format&fit=crop" 
-                alt="Smart Farm" 
+                src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=2000&auto=format&fit=crop" 
+                alt="Smart Farm Aerial View" 
                 className="w-full h-full object-cover scale-105 animate-slow-zoom"
             />
         </div>
 
-        <div className="relative z-20 text-center max-w-5xl px-6 animate-in fade-in slide-in-from-bottom-10 duration-1000 mt-16">
+        <div className="relative z-20 text-center max-w-5xl px-6 animate-in fade-in slide-in-from-bottom-10 duration-1000 mt-24 md:mt-0">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-8 backdrop-blur-sm shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                 <Sprout className="w-4 h-4" />
                 <span className="text-sm font-bold tracking-wider uppercase">Pioneering AgTech in Vietnam</span>
@@ -107,13 +107,14 @@ const LandingPage: React.FC = () => {
             </div>
             <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 rounded-3xl blur-2xl group-hover:opacity-100 transition-opacity opacity-70"></div>
+                {/* Updated Image: Farmer with Tablet in Field */}
                 <img 
-                    src="https://images.unsplash.com/photo-1544211153-6a98295b93d6?q=80&w=1000&auto=format&fit=crop" 
-                    alt="Farmer using technology" 
-                    className="relative rounded-3xl shadow-2xl border border-white/10 w-full object-cover h-[600px] transition-transform duration-700 group-hover:scale-[1.01]"
+                    src="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?q=80&w=1000&auto=format&fit=crop" 
+                    alt="Modern Farmer with Tablet" 
+                    className="relative rounded-3xl shadow-2xl border border-white/10 w-full object-cover h-[500px] md:h-[600px] transition-transform duration-700 group-hover:scale-[1.01]"
                 />
-                 {/* Floating Stats Card */}
-                 <div className="absolute -bottom-10 -left-10 bg-slate-900/90 backdrop-blur-xl border border-slate-700 p-8 rounded-2xl shadow-2xl max-w-xs hidden md:block animate-in slide-in-from-bottom-5 duration-1000 delay-300">
+                 {/* Floating Stats Card - Adjusted position to avoid overlap */}
+                 <div className="absolute -bottom-6 -right-6 md:bottom-10 md:-left-10 bg-slate-900/90 backdrop-blur-xl border border-slate-700 p-6 md:p-8 rounded-2xl shadow-2xl max-w-xs hidden md:block animate-in slide-in-from-bottom-5 duration-1000 delay-300 z-10">
                     <div className="flex items-center gap-5 mb-4">
                         <div className="p-4 bg-blue-500/20 rounded-2xl">
                             <Cpu className="w-8 h-8 text-blue-400" />
@@ -204,27 +205,27 @@ const LandingPage: React.FC = () => {
                 <div className="absolute top-0 left-0 w-full h-full z-0">
                      <iframe
                         src="https://player.cloudinary.com/embed/?cloud_name=ddm2hzdhy&public_id=Tracker_Distance_Measure_2_fdmpw8&autoplay=true&autoplay_mode=on-scroll&muted=true&loop=true&controls=false&control_bar[volumePanel]=false&control_bar[fullscreenToggle]=false"
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700"
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
                         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                         allowFullScreen
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none"></div>
                 </div>
                 
-                <div className="relative z-10 p-10 h-full flex flex-col justify-center max-w-lg">
+                <div className="relative z-10 p-10 h-full flex flex-col justify-center max-w-lg pointer-events-none">
                     <div className="w-14 h-14 bg-emerald-500/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-8 border border-emerald-500/30">
                         <Camera className="w-7 h-7 text-emerald-400" />
                     </div>
                     <h3 className="text-4xl font-bold text-white mb-6">Computer Vision AI</h3>
-                    <p className="text-slate-300 text-lg leading-relaxed mb-8">
+                    <p className="text-slate-200 text-lg leading-relaxed mb-8 drop-shadow-md">
                         Advanced behavior tracking (eating, moving, abnormal lying posture) to detect early signs of illness before they spread. Our models run at the edge for real-time latency.
                     </p>
                     <div className="flex gap-4">
-                        <div className="flex items-center gap-2 text-emerald-400 bg-black/40 backdrop-blur px-3 py-1 rounded-lg border border-white/10 text-sm font-mono">
+                        <div className="flex items-center gap-2 text-emerald-400 bg-black/60 backdrop-blur px-3 py-1 rounded-lg border border-white/10 text-sm font-mono">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             Live Detection
                         </div>
-                        <div className="flex items-center gap-2 text-blue-400 bg-black/40 backdrop-blur px-3 py-1 rounded-lg border border-white/10 text-sm font-mono">
+                        <div className="flex items-center gap-2 text-blue-400 bg-black/60 backdrop-blur px-3 py-1 rounded-lg border border-white/10 text-sm font-mono">
                             <Cpu className="w-3 h-3" />
                             YOLOv8 Model
                         </div>
@@ -234,7 +235,8 @@ const LandingPage: React.FC = () => {
 
             {/* Item 2: IoT Sensors */}
             <div className="bg-slate-900 p-8 rounded-3xl border border-slate-700 hover:border-slate-500 transition-all group relative overflow-hidden flex flex-col justify-between">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-10 group-hover:opacity-20 transition-opacity mix-blend-luminosity"></div>
+                {/* New Image: Circuit/Sensor */}
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1563770094269-79cd4d106f56?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-10 group-hover:opacity-20 transition-opacity mix-blend-luminosity"></div>
                 <div className="relative z-10">
                     <div className="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mb-6 border border-slate-600">
                         <Cpu className="w-6 h-6 text-blue-400" />
@@ -387,7 +389,8 @@ const LandingPage: React.FC = () => {
       {/* 7. CTA / CONTACT */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#020406] z-0"></div>
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
+        {/* New Image: Green Field */}
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
         
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
             <h2 className="text-5xl md:text-6xl font-bold text-white mb-8">Ready to Transform Your Farm?</h2>
