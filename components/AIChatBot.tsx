@@ -2,6 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, Send, X, Bot, User, Loader2, Sparkles, ChevronDown, ShoppingBag } from 'lucide-react';
 import { EnvironmentData, LivestockData, Expert, HealthStatus } from '../types';
 
+// CONFIGURATION: Product Images
+// To use your own images:
+// 1. Place image files in the 'public' folder (e.g., public/feed.jpg) and use "/feed.jpg"
+// 2. Or replace these URLs with your own hosted image links
+const PRODUCT_IMAGES = {
+  NUTRIMIX: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400",
+  PHARMAVET: "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400"
+};
+
 interface AIChatBotProps {
   envData: EnvironmentData[];
   livestockData: LivestockData[];
@@ -213,8 +222,8 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
                         <div className="mb-3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600 relative group cursor-pointer">
                             <img 
                                 src={msg.text.includes('NutriMix') 
-                                    ? "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400" 
-                                    : "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&q=80&w=400"
+                                    ? PRODUCT_IMAGES.NUTRIMIX
+                                    : PRODUCT_IMAGES.PHARMAVET
                                 }
                                 alt="Product Recommendation"
                                 className="w-full h-32 object-cover transition-transform group-hover:scale-105"
