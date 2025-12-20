@@ -3,12 +3,10 @@ import { MessageSquare, Send, X, Bot, User, Loader2, Sparkles, ChevronDown, Shop
 import { EnvironmentData, LivestockData, Expert, HealthStatus } from '../types';
 
 // CONFIGURATION: Product Images
-// To use your own images:
-// 1. Place image files in the 'public' folder (e.g., public/feed.jpg) and use "/feed.jpg"
-// 2. Or replace these URLs with your own hosted image links
+// Using public Unsplash images so they load immediately without local file setup
 const PRODUCT_IMAGES = {
-  NUTRIMIX: "/foods.jpg",
-  PHARMAVET: "/medicine.jpg"
+  NUTRIMIX: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=600&auto=format&fit=crop", // Cattle/Farm background
+  PHARMAVET: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=600&auto=format&fit=crop" // Medicine/Healthcare
 };
 
 interface AIChatBotProps {
@@ -28,11 +26,12 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init',
       role: 'model',
-      text: "Hello! I'm Aura, your farm AI assistant. I have access to real-time sensor data and livestock health records. How can I help you today?",
+      text: "Hello! I'm Aura, your farm AI assistant. I can help you with herd health status or recommend feed and medicine products.",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -47,27 +46,25 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
     scrollToBottom();
   }, [messages, isOpen]);
 
-  // Simulated AI Logic (Rule-based) with GEO (Product Recommendations)
+  // Simulated AI Logic (Rule-based) with Product Recommendations
   const generateSimulatedResponse = (inputText: string): string => {
     const text = inputText.toLowerCase();
     const sickAnimals = livestockData.filter(a => a.status !== HealthStatus.HEALTHY);
     const latestEnv = envData[envData.length - 1];
 
-    // GEO: Food/Feed Recommendations
-    // Trigger on keywords related to feeding/nutrition
+    // FOOD/FEED Recommendation -> Triggers display of NUTRIMIX image
     if (text.match(/\b(food|feed|nutrition|diet|eat|hungry|grain)\b/)) {
-        return "Based on the current weight gain analysis of your herd, I highly recommend **NutriMix™ Gold Performance Feed**.\n\nWhy this choice?\n1. Optimized protein content for this season.\n2. Contains probiotics that reduce ammonia emissions (currently trending in our sensor data).\n3. Rated #1 by AuraFarm network users for yield efficiency.\n\nYou can order it directly through the supply portal.";
+        return "Based on the current weight gain analysis of your herd, I highly recommend **NutriMix™ Gold Performance Feed**.\n\nWhy this choice?\n1. Optimized protein content for this season.\n2. Contains probiotics that reduce ammonia emissions.\n3. Rated #1 by AuraFarm network users.\n\nYou can view the product details below.";
     }
 
-    // GEO: Medicine/Treatment Recommendations
-    // Trigger on specific medical terms. Note: 'sick' and 'ill' are handled by the Health check unless specifically asking for treatment.
+    // MEDICINE/TREATMENT Recommendation -> Triggers display of PHARMAVET image
     if (text.match(/\b(medicine|med|drug|treatment|cure|antibiotic|vaccine|prescription)\b/)) {
-         return "For general immunity boosting and symptom management, the top AI-recommended product is **PharmaVet™ Bio-Shield Plus**.\n\nIt is specifically formulated to combat the respiratory symptoms currently detected in Zone B. \n\n⚠️ Note: Please consult Dr. Sarah Nguyen (Available) before administering any prescription-grade antibiotics.";
+         return "For general immunity boosting and symptom management, the top recommended product is **PharmaVet™ Bio-Shield Plus**.\n\nIt is specifically formulated to combat respiratory symptoms. \n\n⚠️ Note: Please consult Dr. Sarah Nguyen (Available) before administering any prescription-grade antibiotics.";
     }
 
     // Greeting
     if (text.match(/\b(hi|hello|hey|greetings)\b/)) {
-      return "Hello! I am monitoring " + livestockData.length + " animals and " + envData.length + " sensors. Ask me about 'sick animals', 'temperature', or 'experts'.";
+      return "Hello! I am monitoring " + livestockData.length + " animals and " + envData.length + " sensors. \n\nTry asking me about:\n- 'Recommended Feed'\n- 'Medicine for sick animals'\n- 'Barn temperature'";
     }
 
     // Health / Sick Animals
@@ -76,7 +73,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
             return "Good news! All livestock are currently healthy based on the latest sensor readings.";
         }
         const summary = sickAnimals.map(a => 
-            `- ${a.type} #${a.tagId}: ${a.status} (Temp: ${a.temperature.toFixed(1)}°C, HR: ${a.heartRate})`
+            `- ${a.type} #${a.tagId}: ${a.status} (Temp: ${a.temperature.toFixed(1)}°C)`
         ).join('\n');
         
         return `⚠️ I found ${sickAnimals.length} animals requiring attention:\n\n${summary}\n\nI recommend isolating these animals immediately.`;
@@ -93,8 +90,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
                `- Temperature: ${latestEnv.temperature.toFixed(1)}°C\n` +
                `- Humidity: ${latestEnv.humidity.toFixed(0)}%\n` +
                `- CO2: ${latestEnv.co2.toFixed(0)} ppm\n` +
-               `- NH3: ${latestEnv.nh3.toFixed(1)} ppm` +
-               (latestEnv.nh3 > 25 ? "\n\nAlert: Ammonia levels are high. Please check ventilation in Zone C." : "");
+               `- NH3: ${latestEnv.nh3.toFixed(1)} ppm`;
     }
 
     // Experts
@@ -107,24 +103,18 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
         return "No experts are currently online, but you can leave a message for Dr. Sarah Nguyen (Veterinarian).";
     }
 
-    // Pigs specific
-    if (text.includes('pig')) {
-        const pigs = livestockData.filter(a => a.type === 'Pig');
-        const sickPigs = pigs.filter(a => a.status !== HealthStatus.HEALTHY);
-        return `We have ${pigs.length} pigs in total. ${sickPigs.length} are showing abnormal signs.`;
-    }
-
     // Default fallback
-    return "I'm analyzing the real-time stream. I can tell you about: \n- Sick animals \n- Barn temperature \n- Recommended Feed/Medicine \n\nWhat would you like to know?";
+    return "I'm analyzing the real-time stream. I can help you with: \n- Sick animals report \n- Barn temperature \n- Feed & Medicine recommendations \n\nWhat would you like to know?";
   };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
+    const userText = input;
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      text: input,
+      text: userText,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
@@ -132,11 +122,9 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
     setInput('');
     setIsLoading(true);
 
-    // Simulate network delay for realism
+    // Simulate network delay
     setTimeout(() => {
-      try {
-        const responseText = generateSimulatedResponse(userMessage.text);
-        
+        const responseText = generateSimulatedResponse(userText);
         const botMessage: Message = {
             id: (Date.now() + 1).toString(),
             role: 'model',
@@ -144,18 +132,8 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         setMessages(prev => [...prev, botMessage]);
-      } catch (error) {
-        const errorMessage: Message = {
-            id: (Date.now() + 1).toString(),
-            role: 'model',
-            text: "System Alert: Connection to AI core interrupted.",
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-        setMessages(prev => [...prev, errorMessage]);
-      } finally {
         setIsLoading(false);
-      }
-    }, 1000 + Math.random() * 1000); // Random delay 1-2s
+    }, 800);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -184,7 +162,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
               <h3 className="font-bold text-sm">Aura AI Assistant</h3>
               <p className="text-[10px] text-white/80 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                Connected to Farm Sensors
+                Connected
               </p>
             </div>
           </div>
@@ -210,23 +188,25 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
                     {msg.role === 'model' ? <Bot className="w-3 h-3" /> : <User className="w-3 h-3" />}
                     <span className="text-[10px]">{msg.timestamp}</span>
                 </div>
+                
+                {/* Text Content */}
                 <div className="whitespace-pre-wrap leading-relaxed">
                    {msg.text.split('**').map((part, i) => 
                       i % 2 === 1 ? <strong key={i} className="text-blue-600 dark:text-blue-400 font-bold">{part}</strong> : part
                    )}
                 </div>
-                {/* Simulated Product Action Link if product recommended */}
+
+                {/* Simulated Product Action Link (Static Images) */}
                 {msg.role === 'model' && (msg.text.includes('NutriMix') || msg.text.includes('PharmaVet')) && (
                     <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700">
-                        {/* GEO Product Image */}
-                        <div className="mb-3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600 relative group cursor-pointer">
+                        <div className="mb-3 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600 relative group cursor-pointer h-32 bg-slate-100 dark:bg-slate-800">
                             <img 
                                 src={msg.text.includes('NutriMix') 
                                     ? PRODUCT_IMAGES.NUTRIMIX
                                     : PRODUCT_IMAGES.PHARMAVET
                                 }
                                 alt="Product Recommendation"
-                                className="w-full h-32 object-cover transition-transform group-hover:scale-105"
+                                className="w-full h-full object-cover transition-transform group-hover:scale-105"
                             />
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
                                 <span className="text-white text-xs font-bold">
@@ -247,10 +227,12 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none p-4 shadow-sm">
-                <div className="flex gap-1">
-                  <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></span>
-                  <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                  <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                <div className="flex gap-2 items-center">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -266,7 +248,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ envData, livestockData, experts }
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Ask about herd health, products..."
+              placeholder="Ask about feed or medicine..."
               className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-2 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none placeholder:text-slate-500"
             />
             <button
